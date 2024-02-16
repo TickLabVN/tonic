@@ -28,7 +28,7 @@ type Route struct {
 	Url     string
 	Tags    []string
 	Schema  *RouteSchema
-	HandlerRegister func()
+	HandlerRegister func(path string)
 }
 
 type RouteSchema struct {
@@ -54,7 +54,7 @@ func CreateRoutes(basePath string, routes []Route) {
 		route.Url = normalizePath(route.Url)
 
 		// Register the route handler
-		route.HandlerRegister()
+		route.HandlerRegister(route.Url)
 
 		apiPath := toSwaggerAPIPath(fmt.Sprintf("%s%s", basePath, route.Url))
 
