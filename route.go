@@ -6,8 +6,6 @@ import (
 	"regexp"
 	"slices"
 	"strings"
-
-	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -30,7 +28,7 @@ type Route struct {
 	Url     string
 	Tags    []string
 	Schema  *RouteSchema
-	Handler func(c *gin.Context)
+	HandlerRegister func()
 }
 
 type RouteSchema struct {
@@ -44,18 +42,20 @@ type RouteSchema struct {
 
 var apiSpec map[string]any
 
-func CreateRoutes(rg *gin.RouterGroup, routes []Route) {
+func CreateRoutes(basePath string, routes []Route) {
 	if !isInit {
 		panic("Tonic must be initialized first!")
 	}
 
-	basePath := rg.BasePath()
 	apiSpecPaths, _ := apiSpec["paths"].(map[string]any)
 
 	for routeIdx := range routes {
 		route := &routes[routeIdx]
 		route.Url = normalizePath(route.Url)
-		rg.Handle(route.Method, route.Url, route.Handler)
+
+		// Register the route handler
+		route.HandlerRegister()
+
 		apiPath := toSwaggerAPIPath(fmt.Sprintf("%s%s", basePath, route.Url))
 
 		pathSpec, apiPathExisted := apiSpecPaths[apiPath]
