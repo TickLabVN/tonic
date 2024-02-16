@@ -18,6 +18,36 @@ flowchart TD
 
 Meanwhile, Tonic just reflects the code and generates the swagger documentation directly from the code itself.
 
+## Ideas
+
+Using `reflect`, Tonic reads struct's metadata like JSON tag, data type ... and generate an object schema for the struct. For example:
+
+```go
+type ArticleDTO struct {
+    ID 		int 	`json:"id"`
+    Title 	string	`json:"title" binding:"required,min=4,max=255"`
+    Content 	string	`json:"content" binding:"required,min=20"`
+}
+
+// Will be generated to
+{
+    "id: {
+	"type": "integer"
+    },
+    "title": {
+	"type: "string",
+	"minLength": 4,
+	"maxLength": 255
+    },
+    "content": {
+	"type: "string",
+	"minLength": 20
+    }
+}
+```
+
+Combine with route definitions, Tonic constructs an object to contain API documentation data in runtime, then host a swagger UI using [other library](github.com/flowchartsman/swaggerui).
+
 ## Examples
 
 ### Gin
