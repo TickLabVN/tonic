@@ -89,8 +89,8 @@ func main() {
             {
                 Method: Tonic.Get,
                 Url: "/ping",
-                HandlerRegister: func() {
-                    rg.GET("/ping", Ping)
+                HandlerRegister: func(path) {
+                    rg.GET(path, Ping)
                 },
                 Schema: &tonic.RouteSchema{
                     Response: map[int]interface{}{
@@ -102,8 +102,8 @@ func main() {
     }
 
     // tonic.GetHandler() returns the net/http handler for serving the swagger documentation
-    app.GET("/docs/*w", gin.WrapH(http.StripPrefix("/docs", tonic.GetHandler())))
+    r.GET("/docs/*w", gin.WrapH(http.StripPrefix("/docs", tonic.GetHandler())))
 
-    r.Run()
+    r.Run(":8080")
 }
 ```
