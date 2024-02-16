@@ -58,6 +58,7 @@ package main
 import (
     "github.com/gin-gonic/gin"
     "github.com/TickLabVN/tonic"
+    "net/http"
 )
 
 type PingResponse struct {
