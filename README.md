@@ -76,29 +76,29 @@ func main() {
     r := gin.Default()
 
     tonic.Init(&tonic.Config{
-		OpenAPIVersion: "3.0.0",
-		Info: map[string]interface{}{
-			"title":       "Go CRUD Example",
-			"description": "A simple CRUD example using Go and PostgreSQL",
-			"version":     "1.0.0",
-		},
-	})
+        OpenAPIVersion: "3.0.0",
+        Info: map[string]interface{}{
+            "title":       "Go CRUD Example",
+            "description": "A simple CRUD example using Go and PostgreSQL",
+            "version":     "1.0.0",
+        },
+    })
 
     rg := r.Group("/api")
     {
-        tonic.CreateRoutes(rg.BasePath(), &tonic.Route{
+        tonic.CreateRoutes(rg.BasePath(), []tonic.Route{
             {
-                Method: Tonic.Get,
+                Method: tonic.Get,
                 Url: "/ping",
-                HandlerRegister: func(path) {
+                HandlerRegister: func(path string) {
                     rg.GET(path, Ping)
                 },
                 Schema: &tonic.RouteSchema{
                     Response: map[int]interface{}{
                         200: PingResponse{},
-                    }
+                    },
                 },
-            }
+            },
         })
     }
 
