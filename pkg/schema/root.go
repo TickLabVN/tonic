@@ -21,8 +21,9 @@ const (
 )
 
 type Root struct {
-	OpenAPI           string    `json:"openapi"`
-	Info              *Info     `json:"info"`
-	JsonSchemaDialect string    `json:"jsonSchemaDialect,omitempty"`
-	Servers           []*Server `json:"servers,omitempty"`
+	OpenAPI           string           `json:"openapi"`
+	Info              *Info            `json:"info"`
+	JsonSchemaDialect string           `json:"jsonSchemaDialect,omitempty"`
+	Servers           []*Server        `json:"servers,omitempty"`
+	Paths             map[string]*Path `json:"paths"`
 }

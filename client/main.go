@@ -40,11 +40,21 @@ func main() {
 			},
 		}))
 
-	spec := pkg.GetSpec()
+	// Add a path
 
+	pkg.SetPath(map[string]*schema.Path{
+		"/book": {
+			Get: &schema.Operation{
+				Summary: "Get a list of books",
+				Tags:    []string{"book"},
+			},
+		},
+	})
+
+	s := pkg.GetSpec()
 	fmt.Println("spec: ", pkg.GetSpec())
 
-	specBytes, _ := json.Marshal(spec)
+	specBytes, _ := json.Marshal(s)
 	e.GET("/docs/*", echo.WrapHandler(http.StripPrefix("/docs", swaggerui.Handler(specBytes))))
 	// curl http://localhost:12345/swagger/index.html
 	e.Logger.Fatal(e.Start(":12345"))
