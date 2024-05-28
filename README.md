@@ -26,8 +26,8 @@ Using `reflect`, Tonic reads struct's metadata like JSON tag, data type ... and 
 
 ```go
 type ArticleDTO struct {
-    ID 		int 	`json:"id"`
-    Title 	string	`json:"title" binding:"required,min=4,max=255"`
+    ID 		    int 	`json:"id"`
+    Title 	    string	`json:"title" binding:"required,min=4,max=255"`
     Content 	string	`json:"content" binding:"required,min=20"`
 }
 
