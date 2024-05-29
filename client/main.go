@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	pkg "github.com/TickLabVN/tonic"
@@ -41,19 +40,9 @@ func main() {
 		}),
 	)
 
-	// TODO: remove this line, just test
-	pkg.SetPath(docs.Paths{
-		"/book": {
-			Get: &docs.Operation{
-				Summary: "Get a list of books",
-				Tags:    []string{"book"},
-			},
-		},
-	})
+	// TODO: remove these lines, just testing
 
 	s := pkg.GetSpec()
-	fmt.Println("spec: ", pkg.GetSpec())
-
 	s.Components = &docs.Components{
 		Schemas: map[string]*docs.Schema{
 			"GeneralError": {
@@ -147,6 +136,62 @@ func main() {
 						Scopes: map[string]string{
 							"write:pets": "modify pets in your account",
 							"read:pets":  "read your pets",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	// {
+	// 	"/pets": {
+	// 	  "get": {
+	// 		"description": "Returns all pets from the system that the user has access to",
+	// 		"responses": {
+	// 		  "200": {
+	// 			"description": "A list of pets.",
+	// 			"content": {
+	// 			  "application/json": {
+	// 				"schema": {
+	// 				  "type": "array",
+	// 				  "items": {
+	// 					"$ref": "#/components/schemas/pet"
+	// 				  }
+	// 				}
+	// 			  }
+	// 			}
+	// 		  }
+	// 		}
+	// 	  }
+	// 	}
+	//   }
+
+	s.Paths = &docs.Paths{
+		"/pets": {
+			Get: &docs.Operation{
+				Description: "Returns all pets from the system that the user has access to",
+				Responses: &docs.Responses{
+					"200": {
+						Description: "A list of pets.",
+						Content: map[string]*docs.MediaType{
+							"application/json": {
+								Schema: &docs.Schema{
+									Type: "array",
+									Items: &docs.Schema{
+										Ref: "#/components/schemas/Tag",
+									},
+								},
+							},
+						},
+					},
+					"default": {
+						Description: "unexpected error",
+						Content: map[string]*docs.MediaType{
+							"application/json": {
+								Schema: &docs.Schema{
+									Ref: "#/components/schemas/GeneralError",
+								},
+							},
 						},
 					},
 				},
