@@ -3,29 +3,29 @@ package pkg
 import "github.com/TickLabVN/tonic/schema"
 
 type Config interface {
-	apply(*schema.Root)
+	apply(*schema.OpenApi)
 }
 
-type configFn func(*schema.Root)
+type configFn func(*schema.OpenApi)
 
-func (fn configFn) apply(c *schema.Root) {
+func (fn configFn) apply(c *schema.OpenApi) {
 	fn(c)
 }
 
 func WithOpenAPI(openAPI string) configFn {
-	return func(c *schema.Root) {
+	return func(c *schema.OpenApi) {
 		c.OpenAPI = openAPI
 	}
 }
 
 func WithInfo(info *schema.Info) configFn {
-	return func(c *schema.Root) {
+	return func(c *schema.OpenApi) {
 		c.Info = info
 	}
 }
 
-func WithServers(servers []*schema.Server) configFn {
-	return func(c *schema.Root) {
+func WithServers(servers []interface{}) configFn {
+	return func(c *schema.OpenApi) {
 		c.Servers = servers
 	}
 }

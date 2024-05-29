@@ -2,7 +2,7 @@ package pkg
 
 import "github.com/TickLabVN/tonic/schema"
 
-func GetSpec() *schema.Root {
+func GetSpec() *schema.OpenApi {
 	if globalSpec == nil {
 		panic("spec is not initialized")
 	}
