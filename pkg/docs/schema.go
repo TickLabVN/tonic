@@ -10,6 +10,23 @@ package docs
 
 // TODO: Add Discriminator, XML, ExternalDocs
 type Schema struct {
+	Ref                  string            `json:"$ref,omitempty"`
+	Description          string            `json:"description,omitempty"`
+	Format               string            `json:"format,omitempty"`
+	Type                 string            `json:"type,omitempty"`
+	Required             []string          `json:"required,omitempty"`
+	Properties           map[string]Schema `json:"properties,omitempty"`
+	Minimum              int               `json:"minimum,omitempty"`
+	Maximum              int               `json:"maximum,omitempty"`
+	Items                *Schema           `json:"items,omitempty"`
+	Enum                 []string          `json:"enum,omitempty"`
+	AdditionalProperties *Schema           `json:"additionalProperties,omitempty"`
+	Nullable             bool              `json:"nullable,omitempty"`
+	ReadOnly             bool              `json:"readOnly,omitempty"`
+	WriteOnly            bool              `json:"writeOnly,omitempty"`
+	Deprecated           bool              `json:"deprecated,omitempty"`
+	AllOf                []*Schema         `json:"allOf,omitempty"`
+
 	Discriminator *Discriminator `json:"discriminator,omitempty"`
 	XML           *XML           `json:"xml,omitempty"`
 	ExternalDocs  *ExternalDocs  `json:"externalDocs,omitempty"`

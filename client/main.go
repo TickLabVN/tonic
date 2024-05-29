@@ -54,6 +54,106 @@ func main() {
 	s := pkg.GetSpec()
 	fmt.Println("spec: ", pkg.GetSpec())
 
+	s.Components = &docs.Components{
+		Schemas: map[string]*docs.Schema{
+			"GeneralError": {
+				Type: "object",
+				Properties: map[string]docs.Schema{
+					"code": {
+						Type:   "integer",
+						Format: "int32",
+					},
+					"message": {
+						Type: "string",
+					},
+				},
+			},
+			"Category": {
+				Type: "object",
+				Properties: map[string]docs.Schema{
+					"id": {
+						Type:   "integer",
+						Format: "int64",
+					},
+					"name": {
+						Type: "string",
+					},
+				},
+			},
+			"Tag": {
+				Type: "object",
+				Properties: map[string]docs.Schema{
+					"id": {
+						Type:   "integer",
+						Format: "int64",
+					},
+					"name": {
+						Type: "string",
+					},
+				},
+			},
+		},
+		Parameters: map[string]*docs.Parameter{
+			"skipParam": {
+				Name:        "skip",
+				In:          "query",
+				Description: "number of items to skip",
+				Required:    true,
+				Schema: &docs.Schema{
+					Type:   "integer",
+					Format: "int32",
+				},
+			},
+			"limitParam": {
+				Name:        "limit",
+				In:          "query",
+				Description: "max records to return",
+				Required:    true,
+				Schema: &docs.Schema{
+					Type:   "integer",
+					Format: "int32",
+				},
+			},
+		},
+		Responses: map[string]*docs.Response{
+			"NotFound": {
+				Description: "Entity not found.",
+			},
+			"IllegalInput": {
+				Description: "Illegal input for operation.",
+			},
+			"GeneralError": {
+				Description: "General Error",
+				Content: map[string]*docs.MediaType{
+					"application/json": {
+						Schema: &docs.Schema{
+							Ref: "#/components/schemas/GeneralError",
+						},
+					},
+				},
+			},
+		},
+		SecuritySchemes: map[string]*docs.SecurityScheme{
+			"api_key": {
+				Type: "apiKey",
+				Name: "api_key",
+				In:   "header",
+			},
+			"petstore_auth": {
+				Type: "oauth2",
+				Flows: &docs.OAuthFlows{
+					Implicit: &docs.OAuthFlow{
+						AuthorizationURL: "https://example.org/api/oauth/dialog",
+						Scopes: map[string]string{
+							"write:pets": "modify pets in your account",
+							"read:pets":  "read your pets",
+						},
+					},
+				},
+			},
+		},
+	}
+
 	specBytes, _ := json.Marshal(s)
 	e.GET("/docs/*", echo.WrapHandler(http.StripPrefix("/docs", swaggerui.Handler(specBytes))))
 	// curl http://localhost:12345/swagger/index.html
