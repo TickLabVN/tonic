@@ -7,8 +7,8 @@ package docs
 // externalValue	string	A URI that points to the literal example. This provides the capability to reference examples that cannot easily be included in JSON or YAML documents. The value field and externalValue field are mutually exclusive. See the rules for resolving Relative References.
 
 type Example struct {
-	Summary       string      `json:"summary,omitempty"`
-	Description   string      `json:"description,omitempty"`
-	Value         interface{} `json:"value,omitempty"`
-	ExternalValue string      `json:"externalValue,omitempty"`
+	Summary       string `json:"summary,omitempty"`
+	Description   string `json:"description,omitempty"`
+	Value         any    `json:"value,omitempty"`
+	ExternalValue string `json:"externalValue,omitempty"`
 }

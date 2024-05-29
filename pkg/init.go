@@ -7,7 +7,7 @@ var globalSpec *docs.OpenApi
 func Init(options ...Config) {
 	c := &docs.OpenApi{
 		OpenAPI: "3.0.0",
-		Info: &docs.Info{
+		Info: docs.Info{
 			Title:       "Simple API",
 			Version:     "0.0.0",
 			Description: "This is a simple API",

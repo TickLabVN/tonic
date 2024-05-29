@@ -8,5 +8,5 @@ package docs
 type Server struct {
 	URL         string                          `json:"url" validate:"required,url"`
 	Description string                          `json:"description,omitempty"`
-	Variables   map[string]ServerVariableObject `json:"variables,omitempty"`
+	Variables   map[string]ServerVariable `json:"variables,omitempty"`
 }

@@ -18,7 +18,7 @@ func main() {
 	})
 
 	pkg.Init(
-		pkg.WithInfo(&docs.Info{
+		pkg.WithInfo(docs.Info{
 			Title:       "Simple API",
 			Version:     "0.0.3",
 			Description: "This is a simple API for goem template",
@@ -27,7 +27,7 @@ func main() {
 			{
 				URL:         "http://localhost:{port}",
 				Description: "Development server",
-				Variables: map[string]docs.ServerVariableObject{
+				Variables: map[string]docs.ServerVariable{
 					"port": {
 						Default:     "12345",
 						Description: "Port number",
@@ -41,8 +41,7 @@ func main() {
 		}),
 	)
 
-	// Add a path
-
+	// TODO: remove this line, just test
 	pkg.SetPath(docs.Paths{
 		"/book": {
 			Get: &docs.Operation{

@@ -12,15 +12,14 @@ package docs
 // callbacks	Map[string, Callback Object | Reference Object]	An object to hold reusable Callback Objects.
 // pathItems	Map[string, Path Item Object | Reference Object]	An object to hold reusable Path Item Object.
 
-// TODO: Schema Object, Response Object, Parameter Object, Example Object, Request Body Object, Header Object, Security Scheme Object, Link Object, Callback Object, Path Item Object
 type Components struct {
-	Schemas         map[string]*interface{} `json:"schemas,omitempty"`
-	Responses       map[string]*interface{} `json:"responses,omitempty"`
-	Parameters      map[string]*interface{} `json:"parameters,omitempty"`
-	Examples        map[string]*interface{} `json:"examples,omitempty"`
-	RequestBodies   map[string]*interface{} `json:"requestBodies,omitempty"`
-	SecuritySchemes map[string]*interface{} `json:"securitySchemes,omitempty"`
-	Links           map[string]*interface{} `json:"links,omitempty"`
-	Callbacks       map[string]*interface{} `json:"callbacks,omitempty"`
-	PathItems       map[string]*interface{} `json:"pathItems,omitempty"`
+	Schemas         map[string]*Schema         `json:"schemas,omitempty"`
+	Reponses        map[string]*Response       `json:"responses,omitempty"`
+	Parameters      map[string]*Parameter      `json:"parameters,omitempty"`
+	Examples        map[string]*Example        `json:"examples,omitempty"`
+	RequestBodies   map[string]*RequestBody    `json:"requestBodies,omitempty"`
+	SecuritySchemes map[string]*SecurityScheme `json:"securitySchemes,omitempty"`
+	Links           map[string]*Link           `json:"links,omitempty"`
+	Callbacks       map[string]*Callback       `json:"callbacks,omitempty"`
+	PathItems       map[string]*PathItem       `json:"pathItems,omitempty"`
 }
