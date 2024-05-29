@@ -1,31 +1,31 @@
 package pkg
 
-import "github.com/TickLabVN/tonic/schema"
+import "github.com/TickLabVN/tonic/docs"
 
 type Config interface {
-	apply(*schema.OpenApi)
+	apply(*docs.OpenApi)
 }
 
-type configFn func(*schema.OpenApi)
+type configFn func(*docs.OpenApi)
 
-func (fn configFn) apply(c *schema.OpenApi) {
+func (fn configFn) apply(c *docs.OpenApi) {
 	fn(c)
 }
 
 func WithOpenAPI(openAPI string) configFn {
-	return func(c *schema.OpenApi) {
+	return func(c *docs.OpenApi) {
 		c.OpenAPI = openAPI
 	}
 }
 
-func WithInfo(info *schema.Info) configFn {
-	return func(c *schema.OpenApi) {
+func WithInfo(info *docs.Info) configFn {
+	return func(c *docs.OpenApi) {
 		c.Info = info
 	}
 }
 
-func WithServers(servers []*schema.Server) configFn {
-	return func(c *schema.OpenApi) {
+func WithServers(servers []*docs.Server) configFn {
+	return func(c *docs.OpenApi) {
 		c.Servers = servers
 	}
 }
