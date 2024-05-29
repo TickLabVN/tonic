@@ -14,7 +14,7 @@ package docs
 
 type Components struct {
 	Schemas         map[string]*Schema         `json:"schemas,omitempty"`
-	Reponses        map[string]*Response       `json:"responses,omitempty"`
+	Responses       map[string]*Response       `json:"responses,omitempty"`
 	Parameters      map[string]*Parameter      `json:"parameters,omitempty"`
 	Examples        map[string]*Example        `json:"examples,omitempty"`
 	RequestBodies   map[string]*RequestBody    `json:"requestBodies,omitempty"`
