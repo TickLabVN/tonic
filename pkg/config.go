@@ -24,7 +24,7 @@ func WithInfo(info *schema.Info) configFn {
 	}
 }
 
-func WithServers(servers []interface{}) configFn {
+func WithServers(servers []*schema.Server) configFn {
 	return func(c *schema.OpenApi) {
 		c.Servers = servers
 	}

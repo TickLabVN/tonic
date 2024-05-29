@@ -23,22 +23,22 @@ func main() {
 			Version:     "0.0.3",
 			Description: "This is a simple API for goem template",
 		}),
-		// pkg.WithServers([]*schema.Server{
-		// 	{
-		// 		URL:         "http://localhost:{port}",
-		// 		Description: "Development server",
-		// 		Variables: map[string]schema.ServerVariableObject{
-		// 			"port": {
-		// 				Default:     "12345",
-		// 				Description: "Port number",
-		// 			},
-		// 		},
-		// 	},
-		// 	{
-		// 		URL:         "https://api.example.com",
-		// 		Description: "Production server",
-		// 	},
-		// })
+		pkg.WithServers([]*schema.Server{
+			{
+				URL:         "http://localhost:{port}",
+				Description: "Development server",
+				Variables: map[string]schema.ServerVariableObject{
+					"port": {
+						Default:     "12345",
+						Description: "Port number",
+					},
+				},
+			},
+			{
+				URL:         "https://api.example.com",
+				Description: "Production server",
+			},
+		}),
 	)
 
 	// Add a path
