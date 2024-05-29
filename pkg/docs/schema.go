@@ -10,8 +10,8 @@ package docs
 
 // TODO: Add Discriminator, XML, ExternalDocs
 type Schema struct {
-	Discriminator interface{}  `json:"discriminator,omitempty"`
-	XML           interface{}  `json:"xml,omitempty"`
-	ExternalDocs  *ExternalDoc `json:"externalDocs,omitempty"`
-	Example       interface{}  `json:"example,omitempty"`
+	Discriminator *Discriminator `json:"discriminator,omitempty"`
+	XML           *XML           `json:"xml,omitempty"`
+	ExternalDocs  *ExternalDocs  `json:"externalDocs,omitempty"`
+	Example       any            `json:"example,omitempty"`
 }

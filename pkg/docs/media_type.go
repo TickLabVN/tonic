@@ -7,8 +7,8 @@ package docs
 
 // TODO: Add Schema, Example, Examples, Encoding
 type MediaType struct {
-	Schema   *Schema                 `json:"schema,omitempty"`
-	Example  interface{}             `json:"example,omitempty"`
-	Examples map[string]*interface{} `json:"examples,omitempty"`
-	Encoding map[string]*interface{} `json:"encoding,omitempty"`
+	Schema   *Schema              `json:"schema,omitempty"`
+	Example  any                  `json:"example,omitempty"`
+	Examples map[string]*Example  `json:"examples,omitempty"`
+	Encoding map[string]*Encoding `json:"encoding,omitempty"`
 }

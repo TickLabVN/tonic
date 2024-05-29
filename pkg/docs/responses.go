@@ -7,6 +7,6 @@ package docs
 
 // TODO: Response Object, Reference Object, HTTP Status Code
 type Responses struct {
-	Default        *interface{}           `json:"default,omitempty"`
-	HttpStatusCode map[string]interface{} `json:"httpStatusCode,omitempty"`
+	Default        *Response           `json:"default,omitempty"`
+	HttpStatusCode map[string]Response `json:"httpStatusCode,omitempty"`
 }

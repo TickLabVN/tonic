@@ -38,7 +38,7 @@ type Parameter struct {
 	Explode       bool                `json:"explode,omitempty"`
 	AllowReserved bool                `json:"allowReserved,omitempty"`
 	Schema        *Schema             `json:"schema,omitempty"`
-	Example       interface{}         `json:"example,omitempty"`
+	Example       any                 `json:"example,omitempty"`
 	Examples      map[string]*Example `json:"examples,omitempty"`
 
 	Content map[string]*MediaType `json:"content,omitempty"`
