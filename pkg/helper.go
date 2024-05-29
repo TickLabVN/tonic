@@ -10,6 +10,6 @@ func GetSpec() *docs.OpenApi {
 	return globalSpec
 }
 
-func SetPath(path map[string]*docs.Path) {
-	globalSpec.Paths = path
+func SetPath(paths docs.Paths) {
+	globalSpec.Paths = paths
 }

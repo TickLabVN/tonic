@@ -43,7 +43,7 @@ func main() {
 
 	// Add a path
 
-	pkg.SetPath(map[string]*docs.Path{
+	pkg.SetPath(docs.Paths{
 		"/book": {
 			Get: &docs.Operation{
 				Summary: "Get a list of books",

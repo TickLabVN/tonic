@@ -17,7 +17,7 @@ type OpenApi struct {
 	Info              interface{}   `json:"info" validate:"required"`
 	JsonSchemaDialect string        `json:"jsonSchemaDialect,omitempty"`
 	Servers           []*Server     `json:"servers,omitempty"`
-	Paths             interface{}   `json:"paths"`
+	Paths             Paths         `json:"paths"`
 	Webhooks          interface{}   `json:"webhooks,omitempty"`
 	Components        Components    `json:"components,omitempty"`
 	Security          []interface{} `json:"security,omitempty"`
