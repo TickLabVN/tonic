@@ -1,4 +1,4 @@
-package schema
+package docs
 
 type Contact struct {
 	Name  string `json:"name,omitempty"`

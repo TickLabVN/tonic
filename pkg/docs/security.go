@@ -1,4 +1,4 @@
-package schema
+package docs
 
 type ImplicitOAuthFlowObject struct {
 	AuthorizationURL string `json:"authorizationUrl" validate:"required,url"`

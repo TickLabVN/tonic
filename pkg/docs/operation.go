@@ -1,4 +1,4 @@
-package schema
+package docs
 
 // tags	[string]	A list of tags for API documentation control. Tags can be used for logical grouping of operations by resources or any other qualifier.
 // summary	string	A short summary of what the operation does.

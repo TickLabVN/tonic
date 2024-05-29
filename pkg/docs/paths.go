@@ -1,4 +1,4 @@
-package schema
+package docs
 
 // $ref	string	Allows for a referenced definition of this path item. The referenced structure MUST be in the form of a Path Item Object. In case a Path Item Object field appears both in the defined object and the referenced object, the behavior is undefined. See the rules for resolving Relative References.
 // summary	string	An optional, string summary, intended to apply to all operations in this path.

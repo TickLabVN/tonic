@@ -1,4 +1,4 @@
-package schema
+package docs
 
 // Field Name	Type	Description
 // title	string	REQUIRED. The title of the API.

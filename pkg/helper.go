@@ -1,8 +1,8 @@
 package pkg
 
-import "github.com/TickLabVN/tonic/schema"
+import "github.com/TickLabVN/tonic/docs"
 
-func GetSpec() *schema.OpenApi {
+func GetSpec() *docs.OpenApi {
 	if globalSpec == nil {
 		panic("spec is not initialized")
 	}
@@ -10,6 +10,6 @@ func GetSpec() *schema.OpenApi {
 	return globalSpec
 }
 
-func SetPath(path map[string]*schema.Path) {
+func SetPath(path map[string]*docs.Path) {
 	globalSpec.Paths = path
 }

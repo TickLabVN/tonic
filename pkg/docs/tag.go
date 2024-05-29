@@ -1,4 +1,4 @@
-package schema
+package docs
 
 type ExternalDocumentationObject struct {
 	Url         string `json:"url" validate:"required,url"`

@@ -1,4 +1,4 @@
-package schema
+package docs
 
 // Field Name	Type	Description
 // name	string	REQUIRED. The license name used for the API.

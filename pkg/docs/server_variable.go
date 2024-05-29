@@ -1,4 +1,4 @@
-package schema
+package docs
 
 // Field Name	Type	Description
 // enum	[string]	An enumeration of string values to be used if the substitution options are from a limited set. The array MUST NOT be empty.

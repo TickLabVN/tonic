@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	pkg "github.com/TickLabVN/tonic"
-	"github.com/TickLabVN/tonic/schema"
+	"github.com/TickLabVN/tonic/docs"
 	"github.com/flowchartsman/swaggerui"
 	"github.com/labstack/echo/v4"
 )
@@ -18,16 +18,16 @@ func main() {
 	})
 
 	pkg.Init(
-		pkg.WithInfo(&schema.Info{
+		pkg.WithInfo(&docs.Info{
 			Title:       "Simple API",
 			Version:     "0.0.3",
 			Description: "This is a simple API for goem template",
 		}),
-		pkg.WithServers([]*schema.Server{
+		pkg.WithServers([]*docs.Server{
 			{
 				URL:         "http://localhost:{port}",
 				Description: "Development server",
-				Variables: map[string]schema.ServerVariableObject{
+				Variables: map[string]docs.ServerVariableObject{
 					"port": {
 						Default:     "12345",
 						Description: "Port number",
@@ -43,9 +43,9 @@ func main() {
 
 	// Add a path
 
-	pkg.SetPath(map[string]*schema.Path{
+	pkg.SetPath(map[string]*docs.Path{
 		"/book": {
-			Get: &schema.Operation{
+			Get: &docs.Operation{
 				Summary: "Get a list of books",
 				Tags:    []string{"book"},
 			},

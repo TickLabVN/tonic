@@ -1,13 +1,13 @@
 package pkg
 
-import "github.com/TickLabVN/tonic/schema"
+import "github.com/TickLabVN/tonic/docs"
 
-var globalSpec *schema.OpenApi
+var globalSpec *docs.OpenApi
 
 func Init(options ...Config) {
-	c := &schema.OpenApi{
+	c := &docs.OpenApi{
 		OpenAPI: "3.0.0",
-		Info: &schema.Info{
+		Info: &docs.Info{
 			Title:       "Simple API",
 			Version:     "0.0.0",
 			Description: "This is a simple API",

@@ -1,4 +1,4 @@
-package schema
+package docs
 
 // openapi	string	REQUIRED. This string MUST be the version number of the OpenAPI Specification that the OpenAPI document uses. The openapi field SHOULD be used by tooling to interpret the OpenAPI document. This is not related to the API info.version string.
 // info	Info Object	REQUIRED. Provides metadata about the API. The metadata MAY be used by tooling as required.
@@ -19,7 +19,7 @@ type OpenApi struct {
 	Servers           []*Server     `json:"servers,omitempty"`
 	Paths             interface{}   `json:"paths"`
 	Webhooks          interface{}   `json:"webhooks,omitempty"`
-	Components        interface{}   `json:"components,omitempty"`
+	Components        Components    `json:"components,omitempty"`
 	Security          []interface{} `json:"security,omitempty"`
 	Tags              []interface{} `json:"tags,omitempty"`
 	ExternalDocs      interface{}   `json:"externalDocs,omitempty"`
