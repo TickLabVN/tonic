@@ -13,7 +13,18 @@ package docs
 // security	[Security Requirement Object]	A declaration of which security mechanisms can be used for this operation. The list of values includes alternative security requirement objects that can be used. Only one of the security requirement objects need to be satisfied to authorize a request. To make security optional, an empty security requirement ({}) can be included in the array. This definition overrides any declared top-level security. To remove a top-level security declaration, an empty array can be used.
 // servers	[Server Object]	An alternative server array to service this operation. If an alternative server object is specified at the Path Item Object or Root level, it will be overridden by this value.
 
+// TODO: Add ExternalDocs, Parameter Object, Request Body Object, Responses Object, Callback Object, Security Requirement Object, Server Object
 type Operation struct {
-	Tags    []string `json:"tags,omitempty"`
-	Summary string   `json:"summary,omitempty"`
+	Tags         []string                `json:"tags,omitempty"`
+	Summary      string                  `json:"summary,omitempty"`
+	Description  string                  `json:"description,omitempty"`
+	ExternalDocs interface{}             `json:"externalDocs,omitempty"`
+	OperationId  string                  `json:"operationId,omitempty"` //TODO: verify if this is unique
+	Parameters   []*interface{}          `json:"parameters,omitempty"`
+	RequestBody  interface{}             `json:"requestBody,omitempty"`
+	Responses    interface{}             `json:"responses,omitempty"`
+	Callbacks    map[string]*interface{} `json:"callbacks,omitempty"`
+	Deprecated   bool                    `json:"deprecated,omitempty"`
+	Security     []interface{}           `json:"security,omitempty"`
+	Servers      []*Server               `json:"servers,omitempty"`
 }
