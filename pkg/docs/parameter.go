@@ -44,6 +44,11 @@ type Parameter struct {
 	Content map[string]*MediaType `json:"content,omitempty"`
 }
 
+type ParameterOrReference struct {
+	Parameter *Parameter `json:",inline,omitempty"`
+	Ref       string     `json:"$ref,omitempty"`
+}
+
 // style	explode	empty	string	array	object
 // matrix	false	;color	;color=blue	;color=blue,black,brown	;color=R,100,G,200,B,150
 // matrix	true	;color	;color=blue	;color=blue;color=black;color=brown	;R=100;G=200;B=150

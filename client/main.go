@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 
 	pkg "github.com/TickLabVN/tonic"
 	"github.com/TickLabVN/tonic/docs"
+	"github.com/TickLabVN/tonic/json"
 	"github.com/flowchartsman/swaggerui"
 	"github.com/labstack/echo/v4"
 )
@@ -141,32 +141,29 @@ func main() {
 				},
 			},
 		},
+		Examples: map[string]*docs.Example{
+			"cat": {
+				Summary: "An example of a cat",
+				Value: map[string]interface{}{
+					"name":    "Fluffy",
+					"petType": "Cat",
+					"color":   "White",
+				},
+			},
+		},
 	}
 
-	// {
-	// 	"/pets": {
-	// 	  "get": {
-	// 		"description": "Returns all pets from the system that the user has access to",
-	// 		"responses": {
-	// 		  "200": {
-	// 			"description": "A list of pets.",
-	// 			"content": {
-	// 			  "application/json": {
-	// 				"schema": {
-	// 				  "type": "array",
-	// 				  "items": {
-	// 					"$ref": "#/components/schemas/pet"
-	// 				  }
-	// 				}
-	// 			  }
-	// 			}
-	// 		  }
-	// 		}
-	// 	  }
-	// 	}
-	//   }
-
 	s.Paths = &docs.Paths{
+		"/categories": {
+			Get: &docs.Operation{
+				Description: "Returns all categories from the system that the user has access to",
+				Parameters: []*docs.ParameterOrReference{
+					{
+						Ref: "#/components/parameters/limitParam",
+					},
+				},
+			},
+		},
 		"/pets": {
 			Get: &docs.Operation{
 				Description: "Returns all pets from the system that the user has access to",
@@ -199,7 +196,7 @@ func main() {
 		},
 	}
 
-	specBytes, _ := json.Marshal(s)
+	specBytes, _ := json.MalshalInline(s)
 	e.GET("/docs/*", echo.WrapHandler(http.StripPrefix("/docs", swaggerui.Handler(specBytes))))
 	// curl http://localhost:12345/swagger/index.html
 	e.Logger.Fatal(e.Start(":12345"))
