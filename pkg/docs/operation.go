@@ -15,16 +15,16 @@ package docs
 
 // TODO: Add ExternalDocs, Parameter Object, Request Body Object, Responses Object, Callback Object, Security Requirement Object, Server Object
 type Operation struct {
-	Tags         []string               `json:"tags,omitempty"`
-	Summary      string                 `json:"summary,omitempty"`
-	Description  string                 `json:"description,omitempty"`
-	ExternalDocs *ExternalDocs          `json:"externalDocs,omitempty"`
-	OperationId  string                 `json:"operationId,omitempty"` //TODO: verify if this is unique
-	Parameters   []*Parameter           `json:"parameters,omitempty"`
-	RequestBody  *RequestBody           `json:"requestBody,omitempty"`
-	Responses    *Responses             `json:"responses,omitempty"`
-	Callbacks    map[string]*Callback   `json:"callbacks,omitempty"`
-	Deprecated   bool                   `json:"deprecated,omitempty"`
-	Security     []*SecurityRequirement `json:"security,omitempty"`
-	Servers      []*Server              `json:"servers,omitempty"`
+	Tags         []string                `json:"tags,omitempty"`
+	Summary      string                  `json:"summary,omitempty"`
+	Description  string                  `json:"description,omitempty"`
+	ExternalDocs *ExternalDocs           `json:"externalDocs,omitempty"`
+	OperationId  string                  `json:"operationId,omitempty"` //TODO: verify if this is unique
+	Parameters   []*ParameterOrReference `json:"parameters,omitempty"`
+	RequestBody  *RequestBody            `json:"requestBody,omitempty"`
+	Responses    *Responses              `json:"responses,omitempty"`
+	Callbacks    map[string]*Callback    `json:"callbacks,omitempty"`
+	Deprecated   bool                    `json:"deprecated,omitempty"`
+	Security     []*SecurityRequirement  `json:"security,omitempty"`
+	Servers      []*Server               `json:"servers,omitempty"`
 }
