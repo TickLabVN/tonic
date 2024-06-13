@@ -40,8 +40,6 @@ func main() {
 		}),
 	)
 
-	// TODO: remove these lines, just testing
-
 	s := pkg.GetSpec()
 	s.Components = &docs.Components{
 		Schemas: map[string]*docs.Schema{
@@ -89,8 +87,8 @@ func main() {
 				Description: "number of items to skip",
 				Required:    true,
 				Schema: &docs.Schema{
-					Type:   "integer",
-					Format: "int32",
+					Type:    "integer",
+					Integer: &docs.Integer{Format: "int32"},
 				},
 			},
 			"limitParam": {
@@ -99,8 +97,8 @@ func main() {
 				Description: "max records to return",
 				Required:    true,
 				Schema: &docs.Schema{
-					Type:   "integer",
-					Format: "int32",
+					Type:    "integer",
+					Integer: &docs.Integer{Format: "int32"},
 				},
 			},
 		},
@@ -116,7 +114,7 @@ func main() {
 				Content: map[string]*docs.MediaType{
 					"application/json": {
 						Schema: &docs.Schema{
-							Ref: "#/components/schemas/GeneralError",
+							Ref: &docs.Ref{Ref: "#/components/schemas/GeneralError"},
 						},
 					},
 				},
@@ -174,8 +172,10 @@ func main() {
 							"application/json": {
 								Schema: &docs.Schema{
 									Type: "array",
-									Items: &docs.Schema{
-										Ref: "#/components/schemas/Tag",
+									Array: &docs.Array{
+										Items: &docs.Schema{
+											Ref: &docs.Ref{Ref: "#/components/schemas/Category"},
+										},
 									},
 								},
 							},
@@ -186,7 +186,7 @@ func main() {
 						Content: map[string]*docs.MediaType{
 							"application/json": {
 								Schema: &docs.Schema{
-									Ref: "#/components/schemas/GeneralError",
+									Ref: &docs.Ref{Ref: "#/components/schemas/GeneralError"},
 								},
 							},
 						},
