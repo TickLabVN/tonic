@@ -17,3 +17,8 @@ type Link struct {
 	Description  string         `json:"description,omitempty"`
 	Server       *Server        `json:"server,omitempty"`
 }
+
+type LinkOrReference struct {
+	Link      *Link      `json:",inline,omitempty"`
+	Reference *Reference `json:",inline,omitempty"`
+}
