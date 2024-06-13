@@ -34,19 +34,19 @@ type Parameter struct {
 	Deprecated  bool   `json:"deprecated,omitempty"`
 	AllowEmpty  bool   `json:"allowEmptyValue,omitempty"`
 
-	Style         string              `json:"style,omitempty" validate:"oneof=matrix label form simple spaceDelimited pipeDelimited deepObject"`
-	Explode       bool                `json:"explode,omitempty"`
-	AllowReserved bool                `json:"allowReserved,omitempty"`
-	Schema        *Schema             `json:"schema,omitempty"`
-	Example       any                 `json:"example,omitempty"`
-	Examples      map[string]*Example `json:"examples,omitempty"`
+	Style         string                         `json:"style,omitempty" validate:"oneof=matrix label form simple spaceDelimited pipeDelimited deepObject"`
+	Explode       bool                           `json:"explode,omitempty"`
+	AllowReserved bool                           `json:"allowReserved,omitempty"`
+	Schema        *Schema                        `json:"schema,omitempty"`
+	Example       any                            `json:"example,omitempty"`
+	Examples      map[string]*ExampleOrReference `json:"examples,omitempty"`
 
 	Content map[string]*MediaType `json:"content,omitempty"`
 }
 
 type ParameterOrReference struct {
 	Parameter *Parameter `json:",inline,omitempty"`
-	Ref       string     `json:"$ref,omitempty"`
+	Reference *Reference `json:",inline,omitempty"`
 }
 
 // style	explode	empty	string	array	object

@@ -13,14 +13,14 @@ package docs
 
 // TODO: Add Info, Paths, Components, Security, Tags, ExternalDocs
 type OpenApi struct {
-	OpenAPI           string                 `json:"openapi" validate:"required"`
-	Info              Info                   `json:"info" validate:"required"`
-	JsonSchemaDialect string                 `json:"jsonSchemaDialect,omitempty"`
-	Servers           []*Server              `json:"servers,omitempty"`
-	Paths             *Paths                 `json:"paths"`
-	Webhooks          map[string]PathItem    `json:"webhooks,omitempty"`
-	Components        *Components            `json:"components,omitempty"`
-	Security          []*SecurityRequirement `json:"security,omitempty"`
-	Tags              []*Tag                 `json:"tags,omitempty"`
-	ExternalDocs      *ExternalDocs          `json:"externalDocs,omitempty"`
+	OpenAPI           string                          `json:"openapi" validate:"required"`
+	Info              Info                            `json:"info" validate:"required"`
+	JsonSchemaDialect string                          `json:"jsonSchemaDialect,omitempty"`
+	Servers           []*Server                       `json:"servers,omitempty"`
+	Paths             *Paths                          `json:"paths"`
+	Webhooks          map[string]*PathItemOrReference `json:"webhooks,omitempty"`
+	Components        *Components                     `json:"components,omitempty"`
+	Security          []*SecurityRequirement          `json:"security,omitempty"`
+	Tags              []*Tag                          `json:"tags,omitempty"`
+	ExternalDocs      *ExternalDocs                   `json:"externalDocs,omitempty"`
 }

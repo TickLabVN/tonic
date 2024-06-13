@@ -10,3 +10,8 @@ type RequestBody struct {
 	Content     map[string]*MediaType `json:"content,omitempty" validate:"required"`
 	Required    bool                  `json:"required,omitempty"`
 }
+
+type RequestBodyOrReference struct {
+	RequestBody *RequestBody `json:",inline,omitempty"`
+	Reference   *Reference   `json:",inline,omitempty"`
+}

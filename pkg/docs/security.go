@@ -21,4 +21,9 @@ type SecurityScheme struct {
 	OpenIDConnectURL string      `json:"openIdConnectUrl,omitempty" validate:"required_if=Type openIdConnect,url"`
 }
 
+type SecuritySchemeOrReference struct {
+	SecurityScheme *SecurityScheme `json:",inline,omitempty"`
+	Reference      *Reference      `json:",inline,omitempty"`
+}
+
 type SecurityRequirement map[string][]string

@@ -16,17 +16,22 @@ package docs
 
 // TODO: Operation Object, Parameter Object
 type PathItem struct {
-	Ref         string       `json:"$ref,omitempty"` //TODO: verify if this is path item object
-	Summary     string       `json:"summary,omitempty"`
-	Description string       `json:"description,omitempty"`
-	Get         *Operation   `json:"get,omitempty"`
-	Put         *Operation   `json:"put,omitempty"`
-	Post        *Operation   `json:"post,omitempty"`
-	Delete      *Operation   `json:"delete,omitempty"`
-	Options     *Operation   `json:"options,omitempty"`
-	Head        *Operation   `json:"head,omitempty"`
-	Patch       *Operation   `json:"patch,omitempty"`
-	Trace       *Operation   `json:"trace,omitempty"`
-	Servers     []*Server    `json:"servers,omitempty"`
-	Parameters  []*Parameter `json:"parameters,omitempty"`
+	Ref         string                  `json:"$ref,omitempty"` //TODO: verify if this is path item object
+	Summary     string                  `json:"summary,omitempty"`
+	Description string                  `json:"description,omitempty"`
+	Get         *Operation              `json:"get,omitempty"`
+	Put         *Operation              `json:"put,omitempty"`
+	Post        *Operation              `json:"post,omitempty"`
+	Delete      *Operation              `json:"delete,omitempty"`
+	Options     *Operation              `json:"options,omitempty"`
+	Head        *Operation              `json:"head,omitempty"`
+	Patch       *Operation              `json:"patch,omitempty"`
+	Trace       *Operation              `json:"trace,omitempty"`
+	Servers     []*Server               `json:"servers,omitempty"`
+	Parameters  []*ParameterOrReference `json:"parameters,omitempty"`
+}
+
+type PathItemOrReference struct {
+	PathItem  *PathItem  `json:",inline,omitempty"`
+	Reference *Reference `json:",inline,omitempty"`
 }

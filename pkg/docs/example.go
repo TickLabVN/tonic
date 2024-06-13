@@ -12,3 +12,8 @@ type Example struct {
 	Value         any    `json:"value,omitempty"`
 	ExternalValue string `json:"externalValue,omitempty"`
 }
+
+type ExampleOrReference struct {
+	Example   *Example   `json:",inline,omitempty"`
+	Reference *Reference `json:",inline,omitempty"`
+}
