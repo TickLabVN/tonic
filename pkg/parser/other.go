@@ -65,13 +65,19 @@ func ParseStruct(field reflect.Type) (*docs.Schema, error) {
 		var fieldName string
 		if len(jsonTags) > 0 {
 			fieldName = jsonTags[0]
-			if (fieldName == "-" || fieldName == "") && {
+			if fieldName == "-" || fieldName == "" {
+
+				// TODO: handle inline
+
+				continue
 
 			}
 		} else {
 			fieldName = field.Name
 		}
 	}
+
+	return &schema, nil
 }
 
 func ParsePrimitiveField(field reflect.Type) (*docs.Schema, error) {

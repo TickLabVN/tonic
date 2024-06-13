@@ -1,4 +1,4 @@
-package pkg
+package spec
 
 import "github.com/TickLabVN/tonic/docs"
 
@@ -12,4 +12,8 @@ func GetSpec() *docs.OpenApi {
 
 func SetPath(paths *docs.Paths) {
 	globalSpec.Paths = paths
+}
+
+func AddComponents(components *docs.Components) {
+	globalSpec.Components = components
 }

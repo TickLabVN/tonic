@@ -1,51 +1,158 @@
-package json
+package json_test
 
 import (
 	"fmt"
 	"testing"
+
+	json2 "encoding/json"
+
+	"github.com/TickLabVN/tonic/docs"
+	"github.com/TickLabVN/tonic/json"
 )
 
-func TestMalshalInline(t *testing.T) {
-	// check if v is a struct, if not return error
+// generic test suite
+type testSuite struct {
+	name  string
+	input interface{}
+}
 
-	type subStruct struct {
-		SubField1 string `json:"subField1"`
-		SubField2 string `json:"subField2"`
-	}
+func (ts *testSuite) run(t *testing.T) {
+	t.Run(ts.name, func(t *testing.T) {
+		t.Logf("Running test %s", ts.name)
+		bytes, err := json.MarshalInline(ts.input)
+		if err != nil {
+			t.Error(err)
+		}
 
-	type subStruct2 struct {
-		SubField3 string    `json:"subField3"`
-		SubField4 subStruct `json:",inline,omitempty"`
-	}
+		fmt.Println(string(bytes))
+	})
+}
 
-	type testStruct struct {
-		Field1 string     `json:"field1"`
-		Field2 subStruct  `json:",inline,omitempty"`
-		Field3 string     `json:"field3"`
-		Field4 subStruct2 `json:",inline,omitempty"`
-	}
-
-	operation := testStruct{
-		Field1: "field1",
-		Field2: subStruct{
-			SubField1: "subField1",
-			SubField2: "subField2",
+// go test -v -run TestMalsalInlineWithOneFieldIsNill github.com/TickLabVN/tonic/json
+func TestMalsalInlineWithOneFieldIsNill(t *testing.T) {
+	suite := &testSuite{
+		name: "TestMalsalInlineWithOneFieldIsNill",
+		input: struct {
+			Name string `json:"name"`
+			Age  *int   `json:"age,omitempty"`
+		}{
+			Name: "John",
+			Age:  nil,
 		},
-		Field3: "field3",
-		Field4: subStruct2{
-			SubField3: "subField3",
-			SubField4: subStruct{
-				SubField1: "subField4.1",
-				SubField2: "subField4.2",
+	}
+	suite.run(t)
+}
+
+// go test -v -run TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag github.com/TickLabVN/tonic/json
+func TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag(t *testing.T) {
+	suite := &testSuite{
+		name: "TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag",
+		input: struct {
+			Name string
+			Age  *int
+		}{
+			Name: "John",
+			Age:  nil,
+		},
+	}
+	suite.run(t)
+}
+
+func TestMarshalInlineInt32(t *testing.T) {
+	suite := &testSuite{
+		name:  "TestMarshalInlineInt32",
+		input: 10,
+	}
+
+	suite.run(t)
+}
+
+func TestMashalInlineMapString(t *testing.T) {
+	suite := &testSuite{
+		name: "TestMashalInlineMapString",
+		input: map[string]int{
+			"name": 10,
+			"age":  20,
+		},
+	}
+
+	jsonData, _ := json2.Marshal(suite.input)
+	fmt.Println(string(jsonData))
+
+	suite.run(t)
+}
+
+func TestMarshalInlineStruct(t *testing.T) {
+	suite := &testSuite{
+		name: "TestMarshalInlineStruct",
+		input: struct {
+			Name string `json:"name"`
+			Age  int    `json:"age"`
+		}{
+			Name: "John",
+			Age:  20,
+		},
+	}
+
+	suite.run(t)
+}
+
+// go test -v -run TestMarshalMap github.com/TickLabVN/tonic/json
+func TestMarshalMap(t *testing.T) {
+	type Map map[string]struct {
+		Name   string `json:"name"`
+		School *struct {
+			ClassName string `json:"class_name"`
+			Number    int    `json:"number"`
+		} `json:",inline,omitempty"`
+	}
+
+	suite := &testSuite{
+		name: "TestMarshalMap",
+		input: &Map{
+			"12A1": {
+				Name: "John",
+				School: &struct {
+					ClassName string `json:"class_name"`
+					Number    int    `json:"number"`
+				}{
+					ClassName: "School 1",
+					Number:    1,
+				},
 			},
 		},
 	}
+	suite.run(t)
+}
 
-	encodeData, err := MalshalInline(operation)
-	if err != nil {
-		t.Error(err)
+// go test -v -run TestMarshalSpec github.com/TickLabVN/tonic/json
+func TestMarshalSpec(t *testing.T) {
+	paths := docs.NewPaths()
+	paths.AddPath("/categories", &docs.PathItem{
+		Get: &docs.Operation{
+			Description: "Returns all categories from the system that the user has access to",
+			Parameters: []*docs.ParameterOrReference{
+				{
+					Reference: &docs.Reference{
+						Description: "A parameter",
+						Summary:     "A parameter",
+						Ref:         "#/components/parameters/limitParam",
+					},
+				},
+				{
+					Parameter: &docs.Parameter{
+						Name: "skip",
+						In:   "query",
+					},
+				},
+			},
+		},
+	})
+
+	suite := &testSuite{
+		name:  "TestMarshalSpec",
+		input: paths,
 	}
 
-	fmt.Println(string(encodeData))
-
+	suite.run(t)
 }

@@ -13,7 +13,7 @@ type Ref struct {
 	Ref string `json:"$ref,omitempty"`
 }
 type Schema struct {
-	*Ref `json:",inline" validate:"required_unless=type,exclude_with=Tye"`
+	*Ref `json:",inline" validate:"required_unless=type,exclude_with=Type"`
 	Type string `json:"type,omitempty" validate:"required,oneof=object array string integer number boolean"`
 
 	// For primitive types
