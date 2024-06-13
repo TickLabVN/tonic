@@ -14,6 +14,6 @@ type Response struct {
 }
 
 type ResponseOrReference struct {
-	Response *Response `json:",inline,omitempty"`
-	Ref      string    `json:"$ref,omitempty"`
+	Response  *Response  `json:",inline,omitempty"`
+	Reference *Reference `json:",inline,omitempty"`
 }
