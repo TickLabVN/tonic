@@ -13,13 +13,13 @@ package docs
 // pathItems	Map[string, Path Item Object | Reference Object]	An object to hold reusable Path Item Object.
 
 type Components struct {
-	Schemas         map[string]*Schema         `json:"schemas,omitempty"`
-	Responses       map[string]*Response       `json:"responses,omitempty"`
-	Parameters      map[string]*Parameter      `json:"parameters,omitempty"`
-	Examples        map[string]*Example        `json:"examples,omitempty"`
-	RequestBodies   map[string]*RequestBody    `json:"requestBodies,omitempty"`
-	SecuritySchemes map[string]*SecurityScheme `json:"securitySchemes,omitempty"`
-	Links           map[string]*Link           `json:"links,omitempty"`
-	Callbacks       map[string]*Callback       `json:"callbacks,omitempty"`
-	PathItems       map[string]*PathItem       `json:"pathItems,omitempty"`
+	Schemas         map[string]*Schema                    `json:"schemas,omitempty"`
+	Responses       map[string]*ResponseOrReference       `json:"responses,omitempty"`
+	Parameters      map[string]*ParameterOrReference      `json:"parameters,omitempty"`
+	Examples        map[string]*ExampleOrReference        `json:"examples,omitempty"`
+	RequestBodies   map[string]*RequestBodyOrReference    `json:"requestBodies,omitempty"`
+	SecuritySchemes map[string]*SecuritySchemeOrReference `json:"securitySchemes,omitempty"`
+	Links           map[string]*LinkOrReference           `json:"links,omitempty"`
+	Callbacks       map[string]*CallbackOrReference       `json:"callbacks,omitempty"`
+	PathItems       map[string]*PathItemOrReference       `json:"pathItems,omitempty"`
 }

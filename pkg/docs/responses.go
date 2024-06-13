@@ -11,4 +11,4 @@ package docs
 // 	HttpStatusCode map[string]Response `json:"-"`
 // }
 
-type Responses map[string]*Response
+type Responses map[string]*ResponseOrReference

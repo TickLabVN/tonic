@@ -30,3 +30,8 @@ type Header struct {
 
 	Content map[string]*MediaType `json:"content,omitempty"`
 }
+
+type HeaderOrReference struct {
+	Header    *Header    `json:",inline,omitempty"`
+	Reference *Reference `json:",inline,omitempty"`
+}

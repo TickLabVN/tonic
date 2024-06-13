@@ -7,8 +7,13 @@ package docs
 
 // TODO: Header Object, Reference Object, Media Type Object, Link Object, Reference Object
 type Response struct {
-	Description string                `json:"description,omitempty" validate:"required"`
-	Headers     map[string]Header     `json:"headers,omitempty"`
-	Content     map[string]*MediaType `json:"content,omitempty" validate:"required"`
-	Links       map[string]Link       `json:"links,omitempty"`
+	Description string                       `json:"description,omitempty" validate:"required"`
+	Headers     map[string]HeaderOrReference `json:"headers,omitempty"`
+	Content     map[string]*MediaType        `json:"content,omitempty" validate:"required"`
+	Links       map[string]LinkOrReference   `json:"links,omitempty"`
+}
+
+type ResponseOrReference struct {
+	Response *Response `json:",inline,omitempty"`
+	Ref      string    `json:"$ref,omitempty"`
 }

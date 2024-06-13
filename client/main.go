@@ -40,6 +40,10 @@ func main() {
 		}),
 	)
 
+<<<<<<< HEAD
+=======
+	// TODO: remove these lines, just testing
+>>>>>>> 4245b3d (feat: add ref for objectts)
 	s := pkg.GetSpec()
 	s.Components = &docs.Components{
 		Schemas: map[string]*docs.Schema{
@@ -150,7 +154,6 @@ func main() {
 			},
 		},
 	}
-
 	s.Paths = &docs.Paths{
 		"/categories": {
 			Get: &docs.Operation{
@@ -198,6 +201,6 @@ func main() {
 
 	specBytes, _ := json.MalshalInline(s)
 	e.GET("/docs/*", echo.WrapHandler(http.StripPrefix("/docs", swaggerui.Handler(specBytes))))
-	// curl http://localhost:12345/swagger/index.html
+	// curl http://localhost:12345/docs/
 	e.Logger.Fatal(e.Start(":12345"))
 }

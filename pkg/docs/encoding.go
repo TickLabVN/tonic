@@ -9,9 +9,9 @@ package docs
 
 // TODO: Add Header Object, Reference Object
 type Encoding struct {
-	ContentType   string            `json:"contentType,omitempty"`
-	Headers       map[string]Header `json:"headers,omitempty"`
-	Style         string            `json:"style,omitempty"`
-	Explode       bool              `json:"explode,omitempty"`
-	AllowReserved bool              `json:"allowReserved,omitempty"`
+	ContentType   string                       `json:"contentType,omitempty"`
+	Headers       map[string]HeaderOrReference `json:"headers,omitempty"`
+	Style         string                       `json:"style,omitempty"`
+	Explode       bool                         `json:"explode,omitempty"`
+	AllowReserved bool                         `json:"allowReserved,omitempty"`
 }
