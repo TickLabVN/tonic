@@ -1,4 +1,4 @@
-package pkg
+package spec
 
 import "github.com/TickLabVN/tonic/docs"
 
@@ -18,7 +18,7 @@ func WithOpenAPI(openAPI string) configFn {
 	}
 }
 
-func WithInfo(info docs.Info) configFn {
+func WithInfo(info *docs.Info) configFn {
 	return func(c *docs.OpenApi) {
 		c.Info = info
 	}
