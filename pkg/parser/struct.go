@@ -3,7 +3,6 @@ package parser
 import (
 	"fmt"
 	"reflect"
-	"strings"
 
 	"github.com/TickLabVN/tonic/docs"
 )
@@ -57,26 +56,17 @@ func ParseStruct(field reflect.Type) (*docs.Schema, error) {
 	schema := docs.Schema{}
 	schema.Type = "object"
 
-	schema.Properties = make(map[string]*docs.Schema)
-	for i := 0; i < field.NumField(); i++ {
-		field := field.Field(i)
-		jsonTags := strings.Split(strings.TrimSpace(field.Tag.Get(JSON)), ",")
+	// schema.Properties = make(map[string]*docs.Schema)
+	// for i := 0; i < field.NumField(); i++ {
+	// 	field := field.Field(i)
+	// 	jsonTags := strings.Split(strings.TrimSpace(field.Tag.Get(JSON)), ",")
 
-		var fieldName string
-		if len(jsonTags) > 0 {
-			fieldName = jsonTags[0]
-			if fieldName == "-" || fieldName == "" {
-
-				// TODO: handle inline
-
-				continue
-
-			}
-		} else {
-			fieldName = field.Name
-		}
-	}
-
+	// 	if len(jsonTags) > 0 {
+	// 		fieldName = jsonTags[0]
+	// 	} else {
+	// 		fieldName = field.Name
+	// 	}
+	// }
 	return &schema, nil
 }
 
