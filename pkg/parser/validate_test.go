@@ -32,3 +32,5 @@ func TestParseTag(t *testing.T) {
 	assert.Equal("20", fieldValidations["Name"].Max)
 	assert.Equal("18", fieldValidations["Age"].Min)
 }
+
+// See all tag in https://github.com/go-playground/validator?tab=readme-ov-file#baked-in-validations
