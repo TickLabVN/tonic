@@ -1,4 +1,4 @@
-package parser_test
+package schema_test
 
 import (
 	"encoding/json"

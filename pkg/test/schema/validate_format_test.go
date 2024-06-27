@@ -1,4 +1,4 @@
-package parser_test
+package schema_test
 
 import "testing"
 
@@ -255,4 +255,3 @@ func TestValidate_Format_ULID(t *testing.T) {
 func TestValidate_Format_CVE(t *testing.T) {
 	t.Skip("Not implemented")
 }
-
