@@ -45,7 +45,7 @@ func TestValidate_Networks(t *testing.T) {
 	assert := assert.New(t)
 	dt := reflect.TypeOf(Test{})
 
-	_, err := parser.ParseStruct(dt)
+	err := parser.ParseStruct(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
