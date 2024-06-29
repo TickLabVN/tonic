@@ -1,12 +1,8 @@
 package schema_test
 
 import (
-	"encoding/json"
-	"reflect"
 	"testing"
 
-	tonic "github.com/TickLabVN/tonic"
-	"github.com/TickLabVN/tonic/parser"
 	"github.com/TickLabVN/tonic/utils"
 	"github.com/stretchr/testify/assert"
 )
@@ -38,24 +34,9 @@ func TestValidate_Strings(t *testing.T) {
 	}
 
 	assert := assert.New(t)
-	dt := reflect.TypeOf(Test{})
+	result, err := utils.AssertParse(assert, Test{})
+	assert.Nil(err)
 
-	_, err := parser.ParseStruct(dt)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	spec := tonic.GetSpec()
-	schemaName := utils.GetSchemaPath(dt)
-
-	schema, ok := spec.Components.Schemas[schemaName]
-	assert.True(ok)
-	assert.NotNil(schema)
-
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -82,5 +63,5 @@ func TestValidate_Strings(t *testing.T) {
 			"lowercase": {"type": "string", "format": "lowercase", "pattern": "^[a-z]*$"},
 			"multibyte": {"type": "string", "format": "multibyte", "pattern": "^[\\p{L}0-9]*$"}
 		}
-	}`, string(b))
+	}`, result)
 }

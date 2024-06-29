@@ -1,12 +1,10 @@
 package schema_test
 
 import (
-	"encoding/json"
-	"reflect"
 	"testing"
 	"time"
 
-	"github.com/TickLabVN/tonic/parser"
+	"github.com/TickLabVN/tonic/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,15 +22,9 @@ func TestStructWithPrimitiveField(t *testing.T) {
 		Remarks   string  // Default json tag is field name
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -49,7 +41,7 @@ func TestStructWithPrimitiveField(t *testing.T) {
 			"disabled": { type: "boolean" },
 			"Remarks": { type: "string" }
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestStructWithCompoundField(t *testing.T) {
@@ -65,14 +57,8 @@ func TestStructWithCompoundField(t *testing.T) {
 		Info      Information `json:"info"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -89,7 +75,7 @@ func TestStructWithCompoundField(t *testing.T) {
 				}
 			}
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestStructWithStructPointerField(t *testing.T) {
@@ -104,14 +90,9 @@ func TestStructWithStructPointerField(t *testing.T) {
 		Info *Information `json:"info"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
+
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -124,7 +105,7 @@ func TestStructWithStructPointerField(t *testing.T) {
 				}
 			}
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestStructWithFieldIsArrayOfStruct(t *testing.T) {
@@ -139,14 +120,8 @@ func TestStructWithFieldIsArrayOfStruct(t *testing.T) {
 		Infos []Information `json:"infos"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -162,7 +137,7 @@ func TestStructWithFieldIsArrayOfStruct(t *testing.T) {
 				}
 			}
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestStructWithPrimitivePointerType(t *testing.T) {
@@ -180,14 +155,8 @@ func TestStructWithPrimitivePointerType(t *testing.T) {
 		Remarks   *string  `json:"remarks"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -204,7 +173,7 @@ func TestStructWithPrimitivePointerType(t *testing.T) {
 			"disabled": { type: "boolean" },
 			"remarks": { type: "string" }
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestStructWithTimeField(t *testing.T) {
@@ -214,14 +183,8 @@ func TestStructWithTimeField(t *testing.T) {
 		CreatedAt time.Time `json:"created_at"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -230,7 +193,7 @@ func TestStructWithTimeField(t *testing.T) {
 				"format": "date"
 			}
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestEmbeddedField(t *testing.T) {
@@ -246,14 +209,8 @@ func TestEmbeddedField(t *testing.T) {
 		Username    string `json:"username"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -262,7 +219,7 @@ func TestEmbeddedField(t *testing.T) {
 			"age": { "type": "integer" },
 			"username": { "type": "string" }
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestMultiEmbeddedField(t *testing.T) {
@@ -283,14 +240,8 @@ func TestMultiEmbeddedField(t *testing.T) {
 		Username    string `json:"username"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -301,7 +252,7 @@ func TestMultiEmbeddedField(t *testing.T) {
 			"city": { "type": "string" },
 			"username": { "type": "string" }
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestEmbeddedFieldWithOverlappedProperties(t *testing.T) {
@@ -318,14 +269,8 @@ func TestEmbeddedFieldWithOverlappedProperties(t *testing.T) {
 		Username    string `json:"username"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -334,7 +279,7 @@ func TestEmbeddedFieldWithOverlappedProperties(t *testing.T) {
 			"age": { "type": "integer" },
 			"username": { "type": "string" }
 		}
-	}`, string(b))
+	}`, schema)
 }
 
 func TestStructWithMapField(t *testing.T) {
@@ -344,14 +289,8 @@ func TestStructWithMapField(t *testing.T) {
 		Properties map[string]string `json:"properties"`
 	}
 
-	schema, err := parser.ParseStruct(reflect.TypeOf(User{}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	schema, err := utils.AssertParse(assert, User{})
+	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -362,5 +301,5 @@ func TestStructWithMapField(t *testing.T) {
 				}
 			}
 		}
-	}`, string(b))
+	}`, schema)
 }
