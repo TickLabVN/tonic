@@ -1,93 +1,86 @@
 package schema_test
 
 import (
+	"encoding/json"
+	"reflect"
 	"testing"
+
+	tonic "github.com/TickLabVN/tonic"
+	"github.com/TickLabVN/tonic/parser"
+	"github.com/TickLabVN/tonic/utils"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestValidate_Strings_Alpha(t *testing.T) {
-	t.Skip("Not implemented")
-}
-func TestValidate_Strings_Alphanum(t *testing.T) {
-	t.Skip("Not implemented")
-}
+func TestValidate_Strings(t *testing.T) {
+	type Test struct {
+		Alpha           string `json:"alpha" validate:"alpha"`
+		Alphanum        string `json:"alphanum" validate:"alphanum"`
+		AlphanumUnicode string `json:"alphanum_unicode" validate:"alphanum_unicode"`
+		AlphaUnicode    string `json:"alpha_unicode" validate:"alpha_unicode"`
+		ASCII           string `json:"ascii" validate:"ascii"`
+		Boolean         string `json:"boolean" validate:"boolean"`
+		Contains        string `json:"contains" validate:"contains=hello world"`
+		ContainsAny     string `json:"contains_any" validate:"contains_any=hello world"`
+		ContainsRune    string `json:"contains_rune" validate:"contains_rune=⌘"`
+		EndsNotWith     string `json:"ends_not_with" validate:"ends_not_with=bye"`
+		EndsWith        string `json:"ends_with" validate:"ends_with=bye"`
+		Excludes        string `json:"excludes" validate:"excludes=foo"`
+		ExcludesAll     string `json:"excludes_all" validate:"excludes_all=foo"`
+		ExcludesRune    string `json:"excludes_rune" validate:"excludes_rune=⌘"`
+		Number          string `json:"number" validate:"number"`
+		Numeric         string `json:"numeric" validate:"numeric"`
+		PrintASCII      string `json:"print_ascii" validate:"print_ascii"`
+		StartsNotWith   string `json:"starts_not_with" validate:"starts_not_with=hello"`
+		StartsWith      string `json:"starts_with" validate:"starts_with=bye"`
+		Uppercase       string `json:"uppercase" validate:"uppercase"`
+		Lowercase       string `json:"lowercase" validate:"lowercase"`
+		Multibyte       string `json:"multibyte" validate:"multibyte"`
+	}
 
-func TestValidate_Strings_AlphanumUnicode(t *testing.T) {
-	t.Skip("Not implemented")
-}
+	assert := assert.New(t)
+	dt := reflect.TypeOf(Test{})
 
-func TestValidate_Strings_AlphaUnicode(t *testing.T) {
-	t.Skip("Not implemented")
-}
+	_, err := parser.ParseStruct(dt)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-func TestValidate_Strings_ASCII(t *testing.T) {
-	t.Skip("Not implemented")
-}
+	spec := tonic.GetSpec()
+	schemaName := utils.GetSchemaPath(dt)
 
-func TestValidate_Strings_Boolean(t *testing.T) {
-	t.Skip("Not implemented")
-}
+	schema, ok := spec.Components.Schemas[schemaName]
+	assert.True(ok)
+	assert.NotNil(schema)
 
-func TestValidate_Strings_Contains(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_ContainsAny(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_ContainsRune(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_EndsNotWith(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_EndsWith(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_Excludes(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_ExcludesAll(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_ExcludesRune(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_Lowercase(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_Multibyte(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_Number(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_Numeric(t *testing.T) {
-	t.Skip("Not implemented")
-	// Test logic for Numeric tag
-}
-
-func TestValidate_Strings_PrintASCII(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_StartsNotWith(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_StartsWith(t *testing.T) {
-	t.Skip("Not implemented")
-}
-
-func TestValidate_Strings_Uppercase(t *testing.T) {
-	t.Skip("Not implemented")
+	b, err := json.Marshal(schema)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.JSONEq(`{
+		"type": "object",
+		"properties": {
+			"alpha": {"type": "string", "format": "alpha", "pattern": "^[a-zA-Z]*$"},
+			"alphanum": {"type": "string", "format": "alphanum", "pattern": "^[a-zA-Z0-9]*$"},
+			"alphanum_unicode": {"type": "string", "format": "alphanum_unicode", "pattern": "^[\\p{L}0-9]*$"},
+			"alpha_unicode": {"type": "string", "format": "alpha_unicode", "pattern": "^[\\p{L}]*$"},
+			"ascii": {"type": "string", "format": "ascii", "pattern": "^[\\x00-\\x7F]*$"},
+			"boolean": {"type": "string", "format": "boolean", "enum": ["true", "false"]},
+			"contains": {"type": "string", "description": "Contain 'hello world'", "pattern": ".*hello world.*"},
+			"contains_any": {"type": "string", "description": "Contain any chars in 'hello world'", "pattern": ".*[hello world].*"},
+			"contains_rune": {"type": "string", "description": "Contain '⌘'", "pattern": ".*⌘.*"},
+			"ends_not_with": {"type": "string", "description": "Not end with 'bye'", "not": {"pattern": ".*bye$"}},
+			"ends_with": {"type": "string", "description": "End with 'bye'", "pattern": ".*bye$"},
+			"excludes": {"type": "string", "description": "Not contain 'foo'", "not": {"pattern": ".*foo.*"}},
+			"excludes_all": {"type": "string", "description": "Not contain any chars in 'foo'", "not": {"pattern": ".*[foo].*"}},
+			"excludes_rune": {"type": "string", "description": "Not contain '⌘'", "not": {"pattern": ".*⌘.*"}},
+			"number": {"type": "string", "format": "number", "pattern": "^[0-9]*$"},
+			"numeric": {"type": "string", "format": "numeric", "pattern": "^[0-9]*$"},
+			"print_ascii": {"type": "string", "format": "print_ascii", "pattern": "^[\\x20-\\x7E]*$"},	
+			"starts_not_with": {"type": "string", "description": "Not start with 'hello'", "not": {"pattern": "^hello.*"}},
+			"starts_with": {"type": "string", "description": "Start with 'bye'", "pattern": "^bye.*"},
+			"uppercase": {"type": "string", "format": "uppercase", "pattern": "^[A-Z]*$"},
+			"lowercase": {"type": "string", "format": "lowercase", "pattern": "^[a-z]*$"},
+			"multibyte": {"type": "string", "format": "multibyte", "pattern": "^[\\p{L}0-9]*$"}
+		}
+	}`, string(b))
 }
