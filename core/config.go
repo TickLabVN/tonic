@@ -1,6 +1,6 @@
-package spec
+package core
 
-import "github.com/TickLabVN/tonic/docs"
+import "github.com/TickLabVN/tonic/core/docs"
 
 type Config interface {
 	apply(*docs.OpenApi)

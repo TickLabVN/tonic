@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/TickLabVN/tonic/parser"
+	"github.com/TickLabVN/tonic/core/parser"
 	"github.com/stretchr/testify/assert"
 )
 

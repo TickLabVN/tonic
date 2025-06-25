@@ -59,7 +59,7 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
-    "github.com/TickLabVN/tonic"
+    "github.com/TickLabVN/tonic/core"
     "net/http"
 )
 

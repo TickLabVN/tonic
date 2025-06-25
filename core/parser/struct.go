@@ -3,7 +3,7 @@ package parser
 import (
 	"reflect"
 
-	"github.com/TickLabVN/tonic/docs"
+	"github.com/TickLabVN/tonic/core/docs"
 )
 
 const VALIDATE = "validate"

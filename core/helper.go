@@ -1,6 +1,6 @@
-package spec
+package core
 
-import "github.com/TickLabVN/tonic/docs"
+import "github.com/TickLabVN/tonic/core/docs"
 
 func GetSpec() *docs.OpenApi {
 	if globalSpec == nil {

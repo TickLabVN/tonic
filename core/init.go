@@ -1,6 +1,6 @@
-package spec
+package core
 
-import "github.com/TickLabVN/tonic/docs"
+import "github.com/TickLabVN/tonic/core/docs"
 
 var globalSpec *docs.OpenApi
 
@@ -8,11 +8,9 @@ func Init(options ...Config) {
 	c := &docs.OpenApi{
 		OpenAPI: "3.0.0",
 		Info: &docs.Info{
-			Title:       "Simple API",
+			Title:       "Tonic API",
 			Version:     "0.0.0",
-			Description: "This is a simple API",
 		},
-		JsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema",
 	}
 
 	for _, option := range options {

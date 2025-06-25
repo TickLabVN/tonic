@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/TickLabVN/tonic/parser"
+	tonic "github.com/TickLabVN/tonic/core"
+	"github.com/TickLabVN/tonic/core/parser"
 	"github.com/stretchr/testify/assert"
-	tonic "github.com/TickLabVN/tonic"
-
 )
 
-func AssertParse(assert* assert.Assertions, data interface{}) (string, error) {
+func AssertParse(assert *assert.Assertions, data interface{}) (string, error) {
 	dt := reflect.TypeOf(data)
 	err := parser.ParseStruct(dt)
 	if err != nil {

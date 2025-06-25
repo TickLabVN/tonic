@@ -1,4 +1,4 @@
-module github.com/TickLabVN/tonic
+module github.com/TickLabVN/tonic/core
 
 go 1.21.6
 

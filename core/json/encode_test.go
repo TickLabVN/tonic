@@ -6,8 +6,8 @@ import (
 
 	json2 "encoding/json"
 
-	"github.com/TickLabVN/tonic/docs"
-	"github.com/TickLabVN/tonic/json"
+	"github.com/TickLabVN/tonic/core/docs"
+	"github.com/TickLabVN/tonic/core/json"
 )
 
 // generic test suite
@@ -28,7 +28,7 @@ func (ts *testSuite) run(t *testing.T) {
 	})
 }
 
-// go test -v -run TestMalsalInlineWithOneFieldIsNill github.com/TickLabVN/tonic/json
+// go test -v -run TestMalsalInlineWithOneFieldIsNill github.com/TickLabVN/tonic/core/json
 func TestMalsalInlineWithOneFieldIsNill(t *testing.T) {
 	suite := &testSuite{
 		name: "TestMalsalInlineWithOneFieldIsNill",
@@ -43,7 +43,7 @@ func TestMalsalInlineWithOneFieldIsNill(t *testing.T) {
 	suite.run(t)
 }
 
-// go test -v -run TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag github.com/TickLabVN/tonic/json
+// go test -v -run TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag github.com/TickLabVN/tonic/core/json
 func TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag(t *testing.T) {
 	suite := &testSuite{
 		name: "TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag",
@@ -97,7 +97,7 @@ func TestMarshalInlineStruct(t *testing.T) {
 	suite.run(t)
 }
 
-// go test -v -run TestMarshalMap github.com/TickLabVN/tonic/json
+// go test -v -run TestMarshalMap github.com/TickLabVN/tonic/core/json
 func TestMarshalMap(t *testing.T) {
 	type Map map[string]struct {
 		Name   string `json:"name"`
@@ -125,7 +125,7 @@ func TestMarshalMap(t *testing.T) {
 	suite.run(t)
 }
 
-// go test -v -run TestMarshalSpec github.com/TickLabVN/tonic/json
+// go test -v -run TestMarshalSpec github.com/TickLabVN/tonic/core/json
 func TestMarshalSpec(t *testing.T) {
 	paths := docs.NewPaths()
 	paths.AddPath("/categories", &docs.PathItem{

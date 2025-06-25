@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/TickLabVN/tonic/utils"
+	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
 
