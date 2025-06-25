@@ -16,6 +16,7 @@ type Config struct {
 	OpenAPIVersion string         `json:"openapi"`
 	Info           map[string]any `json:"info"`
 	ExternalDocs   *ExternalDocs  `json:"externalDocs,omitempty"`
+	Tags           []string       `json:"tags,omitempty"`
 }
 
 var isInit = false
@@ -29,6 +30,13 @@ func Init(config *Config) {
 	}
 	if config.ExternalDocs != nil {
 		apiSpec["externalDocs"] = config.ExternalDocs
+	}
+	if len(config.Tags) > 0 {
+		tagObjs := make([]map[string]any, len(config.Tags))
+		for i, t := range config.Tags {
+			tagObjs[i] = map[string]any{"name": t}
+		}
+		apiSpec["tags"] = tagObjs
 	}
 	apiSpec["components"] = map[string]any{
 		"schemas": make(map[string]any),
