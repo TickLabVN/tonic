@@ -3,6 +3,7 @@ package schema_test
 import (
 	"testing"
 
+	"github.com/TickLabVN/tonic/core"
 	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
@@ -74,7 +75,8 @@ func TestValidate_Format(t *testing.T) {
 		CVE                        string `json:"cve" validate:"cve"`
 	}
 	assert := assert.New(t)
-	schema, err := utils.AssertParse(assert, Test{})
+	spec := core.Init()
+	schema, err := utils.AssertParse(assert, spec, Test{})
 	assert.Nil(err)
 
 	assert.JSONEq(`{

@@ -2,9 +2,7 @@ package core
 
 import "github.com/TickLabVN/tonic/core/docs"
 
-var globalSpec *docs.OpenApi
-
-func Init(options ...Config) {
+func Init(options ...Config) *docs.OpenApi {
 	c := &docs.OpenApi{
 		OpenAPI: "3.0.0",
 		Info: &docs.Info{
@@ -17,5 +15,5 @@ func Init(options ...Config) {
 		option.apply(c)
 	}
 
-	globalSpec = c
+	return c
 }

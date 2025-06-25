@@ -4,19 +4,18 @@ import (
 	"encoding/json"
 	"reflect"
 
-	tonic "github.com/TickLabVN/tonic/core"
+	"github.com/TickLabVN/tonic/core/docs"
 	"github.com/TickLabVN/tonic/core/parser"
 	"github.com/stretchr/testify/assert"
 )
 
-func AssertParse(assert *assert.Assertions, data interface{}) (string, error) {
+func AssertParse(assert *assert.Assertions, spec *docs.OpenApi, data any) (string, error) {
 	dt := reflect.TypeOf(data)
 	err := parser.ParseStruct(dt)
 	if err != nil {
 		return "", err
 	}
 
-	spec := tonic.GetSpec()
 	schemaName := GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]

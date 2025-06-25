@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	tonic "github.com/TickLabVN/tonic/core"
+	"github.com/TickLabVN/tonic/core"
 	"github.com/TickLabVN/tonic/core/parser"
 	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
@@ -28,7 +28,7 @@ func TestValidate_Comparision_Eq(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schemaName := utils.GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]
@@ -85,7 +85,7 @@ func TestValidate_Comparision_EqIgnoreCase(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schemaName := utils.GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]
@@ -123,7 +123,7 @@ func TestValidate_Comparision_Gt(t *testing.T) {
 	}
 
 	schemaPath := utils.GetSchemaPath(dt)
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schema, ok := spec.Components.Schemas[schemaPath]
 
 	assert.True(ok)
@@ -176,7 +176,7 @@ func TestValidate_Comparision_Gte(t *testing.T) {
 	}
 
 	schemaPath := utils.GetSchemaPath(dt)
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schema, ok := spec.Components.Schemas[schemaPath]
 
 	assert.True(ok)
@@ -225,7 +225,7 @@ func TestValidate_Comparision_Lt(t *testing.T) {
 	}
 
 	schemaPath := utils.GetSchemaPath(dt)
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schema, ok := spec.Components.Schemas[schemaPath]
 	assert.True(ok)
 	assert.NotNil(schema)
@@ -278,7 +278,7 @@ func TestValidate_Comparision_Lte(t *testing.T) {
 	}
 
 	schemaPath := utils.GetSchemaPath(dt)
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schema, ok := spec.Components.Schemas[schemaPath]
 	assert.True(ok)
 	assert.NotNil(schema)
@@ -330,7 +330,7 @@ func TestValidate_Comparision_Ne(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schemaName := utils.GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]
@@ -393,7 +393,7 @@ func TestValidate_Comparision_NeIgnoreCase(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schemaName := utils.GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]

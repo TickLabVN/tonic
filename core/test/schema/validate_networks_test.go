@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	tonic "github.com/TickLabVN/tonic/core"
+	"github.com/TickLabVN/tonic/core"
 	"github.com/TickLabVN/tonic/core/parser"
 	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
@@ -50,7 +50,7 @@ func TestValidate_Networks(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	spec := tonic.GetSpec()
+	spec := core.Init()
 	schemaName := utils.GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]

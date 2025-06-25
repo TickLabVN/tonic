@@ -3,6 +3,7 @@ package schema_test
 import (
 	"testing"
 
+	"github.com/TickLabVN/tonic/core"
 	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
@@ -33,8 +34,9 @@ func TestValidate_Strings(t *testing.T) {
 		Multibyte       string `json:"multibyte" validate:"multibyte"`
 	}
 
+	spec := core.Init()
 	assert := assert.New(t)
-	result, err := utils.AssertParse(assert, Test{})
+	result, err := utils.AssertParse(assert, spec, Test{})
 	assert.Nil(err)
 
 	assert.JSONEq(`{
