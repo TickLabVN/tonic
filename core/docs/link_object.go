@@ -9,16 +9,16 @@ package docs
 // server	Server Object	A server object to be used by the target operation.
 
 // TODO: TODO: Parametters
-type Link struct {
+type LinkObject struct {
 	OperationRef string         `json:"operationRef,omitempty"`
 	OperationId  string         `json:"operationId,omitempty"`
 	Parameters   map[string]any `json:"parameters,omitempty"`
 	RequestBody  any            `json:"requestBody,omitempty"`
 	Description  string         `json:"description,omitempty"`
-	Server       *Server        `json:"server,omitempty"`
+	Server       *ServerObject  `json:"server,omitempty"`
 }
 
 type LinkOrReference struct {
-	Link      *Link      `json:",inline,omitempty"`
-	Reference *Reference `json:",inline,omitempty"`
+	Link      *LinkObject      `json:",inline,omitempty"`
+	Reference *ReferenceObject `json:",inline,omitempty"`
 }

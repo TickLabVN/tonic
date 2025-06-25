@@ -12,7 +12,7 @@ const QUERY = "query"
 const PARAM = "param"
 
 func ParseStruct(field reflect.Type) error {
-	schema := docs.Schema{}
+	schema := docs.SchemaObject{}
 	schema.Type = "object"
 	return nil
 }

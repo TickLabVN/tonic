@@ -6,8 +6,7 @@ import (
 	"strings"
 )
 
-func MarshalInline(v interface{}) ([]byte, error) {
-	// if v is not a struct or pointer to struct, return json.Marshal error
+func MarshalInline(v any) ([]byte, error) {
 	rv := reflect.ValueOf(v)
 	if rv.Kind() == reflect.Ptr {
 		if rv.IsNil() {
@@ -38,7 +37,7 @@ func MarshalInline(v interface{}) ([]byte, error) {
 
 		// check if the array is stored the array of any type
 		if rv.Index(0).Kind() == reflect.Array {
-			array := make([]interface{}, rv.Len())
+			array := make([]any, rv.Len())
 			for i := 0; i < rv.Len(); i++ {
 				data, err := MarshalInline(rv.Index(i).Interface())
 				if err != nil {
@@ -59,14 +58,14 @@ func MarshalInline(v interface{}) ([]byte, error) {
 
 			if rv.Index(0).Elem().Kind() == reflect.Struct {
 				// create a slice to store the fields of the struct
-				s := make([]interface{}, rv.Len())
+				s := make([]any, rv.Len())
 				for i := 0; i < rv.Len(); i++ {
 					data, err := MarshalInline(rv.Index(i).Interface())
 					if err != nil {
 						return nil, err
 					}
 
-					decoded := map[string]interface{}{}
+					decoded := map[string]any{}
 					err = json.Unmarshal(data, &decoded)
 					if err != nil {
 						return nil, err
@@ -79,14 +78,14 @@ func MarshalInline(v interface{}) ([]byte, error) {
 
 		if rv.Index(0).Kind() == reflect.Struct {
 			// create a slice to store the fields of the struct
-			s := make([]interface{}, rv.Len())
+			s := make([]any, rv.Len())
 			for i := 0; i < rv.Len(); i++ {
 				data, err := MarshalInline(rv.Index(i).Interface())
 				if err != nil {
 					return nil, err
 				}
 
-				decoded := map[string]interface{}{}
+				decoded := map[string]any{}
 				err = json.Unmarshal(data, &decoded)
 				if err != nil {
 					return nil, err
@@ -113,7 +112,7 @@ func MarshalInline(v interface{}) ([]byte, error) {
 		}
 
 		// create a map to store the fields of the struct
-		m := make(map[string]interface{})
+		m := make(map[string]any)
 		for _, key := range rv.MapKeys() {
 			value := rv.MapIndex(key)
 			data, err := MarshalInline(value.Interface())
@@ -121,7 +120,7 @@ func MarshalInline(v interface{}) ([]byte, error) {
 				return nil, err
 			}
 
-			decoded := map[string]interface{}{}
+			decoded := map[string]any{}
 			err = json.Unmarshal(data, &decoded)
 			if err != nil {
 				return nil, err
@@ -132,7 +131,7 @@ func MarshalInline(v interface{}) ([]byte, error) {
 	}
 
 	// create a map to store the fields of the struct
-	m := make(map[string]interface{})
+	m := make(map[string]any)
 	t := rv.Type()
 	for i := 0; i < rv.NumField(); i++ {
 		f := t.Field(i)
@@ -168,7 +167,7 @@ func MarshalInline(v interface{}) ([]byte, error) {
 				}
 				// the data is a map, so we need to merge it with the current map
 				// convert the data to a map
-				var dataMap map[string]interface{}
+				var dataMap map[string]any
 				err = json.Unmarshal(data, &dataMap)
 				if err != nil {
 					return nil, err
@@ -184,7 +183,7 @@ func MarshalInline(v interface{}) ([]byte, error) {
 				if err != nil {
 					return nil, err
 				}
-				var decoded interface{}
+				var decoded any
 				err = json.Unmarshal(data, &decoded)
 				if err != nil {
 					return nil, err
@@ -199,5 +198,4 @@ func MarshalInline(v interface{}) ([]byte, error) {
 
 func isPrimitiveType(kind reflect.Kind) bool {
 	return kind == reflect.Bool || kind == reflect.Int || kind == reflect.Uint || kind == reflect.Int8 || kind == reflect.Uint8 || kind == reflect.Int16 || kind == reflect.Uint16 || kind == reflect.Int32 || kind == reflect.Uint32 || kind == reflect.Int64 || kind == reflect.Uint64 || kind == reflect.Complex64 || kind == reflect.Complex128 || kind == reflect.String
-
 }

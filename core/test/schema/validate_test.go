@@ -17,7 +17,7 @@ type User struct {
 func TestParseTag(t *testing.T) {
 	assert := assert.New(t)
 	userType := reflect.TypeOf(User{})
-	fieldValidations := make(map[string]*parser.ValidateTag)
+	fieldValidations := make(map[string]parser.ValidateTag)
 	for i := 0; i < userType.NumField(); i++ {
 		field := userType.Field(i)
 		tag := field.Tag.Get("validate")
@@ -25,7 +25,7 @@ func TestParseTag(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		fieldValidations[field.Name] = tagObj
+		fieldValidations[field.Name] = *tagObj
 	}
 	assert.Equal(true, fieldValidations["Email"].Email)
 	assert.Equal("3", fieldValidations["Name"].Min)

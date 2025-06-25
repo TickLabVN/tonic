@@ -196,7 +196,7 @@ func ParseTag(tag string) (*ValidateTag, error) {
 		return nil, errors.New("empty tag")
 	}
 	parts := strings.Split(tag, ",")
-	rawTag := make(map[string]interface{})
+	rawTag := make(map[string]any)
 
 	for i := range parts {
 		parts[i] = strings.TrimSpace(parts[i])

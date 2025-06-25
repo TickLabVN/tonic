@@ -13,7 +13,7 @@ import (
 // generic test suite
 type testSuite struct {
 	name  string
-	input interface{}
+	input any
 }
 
 func (ts *testSuite) run(t *testing.T) {
@@ -46,7 +46,7 @@ func TestMalsalInlineWithOneFieldIsNill(t *testing.T) {
 // go test -v -run TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag github.com/TickLabVN/tonic/core/json
 func TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag(t *testing.T) {
 	suite := &testSuite{
-		name: "TestMalsalInlineWithOneFieldIsNilAndNotHaveJsonTag",
+		name: t.Name(),
 		input: struct {
 			Name string
 			Age  *int
@@ -128,19 +128,19 @@ func TestMarshalMap(t *testing.T) {
 // go test -v -run TestMarshalSpec github.com/TickLabVN/tonic/core/json
 func TestMarshalSpec(t *testing.T) {
 	paths := docs.NewPaths()
-	paths.AddPath("/categories", &docs.PathItem{
+	paths.AddPath("/categories", docs.PathItemObject{
 		Get: &docs.Operation{
 			Description: "Returns all categories from the system that the user has access to",
-			Parameters: []*docs.ParameterOrReference{
+			Parameters: []docs.ParameterOrReference{
 				{
-					Reference: &docs.Reference{
+					Reference: &docs.ReferenceObject{
 						Description: "A parameter",
 						Summary:     "A parameter",
 						Ref:         "#/components/parameters/limitParam",
 					},
 				},
 				{
-					Parameter: &docs.Parameter{
+					Parameter: &docs.ParameterObject{
 						Name: "skip",
 						In:   "query",
 					},

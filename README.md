@@ -79,7 +79,7 @@ func main() {
 
     tonic.Init(&tonic.Config{
         OpenAPIVersion: "3.0.0",
-        Info: map[string]interface{}{
+        Info: map[string]any{
             "title":       "Go CRUD Example",
             "description": "A simple CRUD example using Go and PostgreSQL",
             "version":     "1.0.0",
@@ -100,7 +100,7 @@ func main() {
                     rg.GET(path, Ping)
                 },
                 Schema: &tonic.RouteSchema{
-                    Response: map[int]interface{}{
+                    Response: map[int]any{
                         200: PingResponse{},
                     },
                 },

@@ -9,11 +9,11 @@ package docs
 type Response struct {
 	Description string                       `json:"description,omitempty" validate:"required"`
 	Headers     map[string]HeaderOrReference `json:"headers,omitempty"`
-	Content     map[string]*MediaType        `json:"content,omitempty" validate:"required"`
+	Content     map[string]MediaTypeObject   `json:"content,omitempty" validate:"required"`
 	Links       map[string]LinkOrReference   `json:"links,omitempty"`
 }
 
 type ResponseOrReference struct {
-	Response  *Response  `json:",inline,omitempty"`
-	Reference *Reference `json:",inline,omitempty"`
+	Response  *Response        `json:",inline,omitempty"`
+	Reference *ReferenceObject `json:",inline,omitempty"`
 }
