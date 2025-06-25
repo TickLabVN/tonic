@@ -84,6 +84,9 @@ func main() {
             "description": "A simple CRUD example using Go and PostgreSQL",
             "version":     "1.0.0",
         },
+        // The order of Tags above will be reflected in the Swagger UI
+        // allowing you to prioritize groups such as Auth API first.
+        Tags: []string{"Auth API", "Example API"},
     })
 
     rg := r.Group("/api")
@@ -92,6 +95,7 @@ func main() {
             {
                 Method: tonic.Get,
                 Url: "/ping",
+                Tags: []string{"Example API"},
                 HandlerRegister: func(path string) {
                     rg.GET(path, Ping)
                 },
