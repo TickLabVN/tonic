@@ -1,12 +1,4 @@
-// eq	Equals
-// eq_ignore_case	Equals ignoring case
-// gt	Greater than
-// gte	Greater than or equal
-// lt	Less Than
-// lte	Less Than or Equal
-// ne	Not Equal
-// ne_ignore_case	Not Equal ignoring case
-package parser
+package validator
 
 import (
 	"encoding/json"
@@ -14,7 +6,7 @@ import (
 	"strings"
 )
 
-type ValidateTag struct {
+type ValidateFlag struct {
 	// Fields
 	EqCsField     bool `json:"eqcsfield,omitempty"`
 	EqField       bool `json:"eqfield,omitempty"`
@@ -170,14 +162,14 @@ type ValidateTag struct {
 	Min                string          `json:"min"`
 	OneOf              []string        `json:"oneof,omitempty"`
 	Required           bool            `json:"required"`
-	RequiredIf         *TagComparision `json:"required_if,omitempty"`
-	RequiredUnless     *TagComparision `json:"required_unless,omitempty"`
+	RequiredIf         *ComparisonFlag `json:"required_if,omitempty"`
+	RequiredUnless     *ComparisonFlag `json:"required_unless,omitempty"`
 	RequiredWith       string          `json:"required_with,omitempty"`
 	RequiredWithAll    []string        `json:"required_with_all,omitempty"`
 	RequiredWithout    string          `json:"required_without,omitempty"`
 	RequiredWithoutAll []string        `json:"required_without_all,omitempty"`
-	ExcludedIf         *TagComparision `json:"excluded_if,omitempty"`
-	ExcludedUnless     *TagComparision `json:"excluded_unless,omitempty"`
+	ExcludedIf         *ComparisonFlag `json:"excluded_if,omitempty"`
+	ExcludedUnless     *ComparisonFlag `json:"excluded_unless,omitempty"`
 	ExcludedWith       string          `json:"excluded_with,omitempty"`
 	ExcludedWithAll    []string        `json:"excluded_with_all,omitempty"`
 	ExcludedWithout    string          `json:"excluded_without,omitempty"`
@@ -185,12 +177,12 @@ type ValidateTag struct {
 	Unique             bool            `json:"unique"`
 }
 
-type TagComparision struct {
+type ComparisonFlag struct {
 	FieldName string   `json:"fieldname"`
 	Values    []string `json:"values"`
 }
 
-func ParseTag(tag string) (*ValidateTag, error) {
+func ParseValidateTag(tag string) (*ValidateFlag, error) {
 	tag = strings.TrimSpace(tag)
 	if len(tag) == 0 {
 		return nil, errors.New("empty tag")
@@ -214,7 +206,7 @@ func ParseTag(tag string) (*ValidateTag, error) {
 		}
 	}
 
-	validateTag := &ValidateTag{}
+	validateTag := &ValidateFlag{}
 	b, err := json.Marshal(rawTag)
 	if err != nil {
 		return nil, err
