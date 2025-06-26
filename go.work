@@ -2,6 +2,8 @@ go 1.24.2
 
 use (
 	./adapters/echo
-	./examples/echo
+	./adapters/gin
 	./core
+	./examples/echo
+	./examples/gin
 )

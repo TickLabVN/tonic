@@ -51,10 +51,19 @@ func main() {
 	echoAdapter.AddRoute[GetUserRequest, User](
 		openApiSpec,
 		e.GET("/users/:id", GetUser, m.Bind[GetUserRequest]),
+		docs.OperationObject{
+			Summary:     "Get User by ID",
+			Tags:        []string{"User"},
+		},
 	)
 	echoAdapter.AddRoute[User, User](
 		openApiSpec,
 		e.POST("/users", GetUser, m.Bind[User]),
+		docs.OperationObject{
+			Summary:     "Create User",
+			Description: "Example of creating a user",
+			Tags:        []string{"User"},
+		},
 	)
 
 	echoAdapter.UIHandle(e, openApiSpec, "/docs")

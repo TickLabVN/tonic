@@ -3,6 +3,7 @@ package echoAdapter
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/TickLabVN/tonic/core/docs"
 	"github.com/TickLabVN/tonic/core/utils"
@@ -14,8 +15,10 @@ func AddRoute[D any, R any](spec *docs.OpenApi, route *echo.Route, opts ...docs.
 	spec.Components.AddSchema(resp)
 
 	op := utils.MergeStructs(opts...)
+	opId := fmt.Sprintf("%s_%s", route.Method, route.Name)
+	opId = strings.ReplaceAll(opId, ".", "_")
 	op = utils.MergeStructs(op, docs.OperationObject{
-		OperationId: fmt.Sprintf("%s_%s", route.Method, route.Path),
+		OperationId: opId,
 		// Parameters:  docs.GetParametersFromType(input),
 		Responses: map[string]docs.ResponseOrReference{
 			"200":  {
