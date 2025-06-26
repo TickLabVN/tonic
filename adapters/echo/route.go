@@ -12,7 +12,11 @@ import (
 
 func AddRoute[D any, R any](spec *docs.OpenApi, route *echo.Route, opts ...docs.OperationObject) {
 	_, resp := reflect.TypeOf(new(D)), reflect.TypeOf(new(R))
-	spec.Components.AddSchema(resp)
+	err := spec.Components.AddSchema(resp)
+	if err != nil {
+		fmt.Printf("Error adding schema: %v\n", err)
+		return
+	}
 
 	op := utils.MergeStructs(opts...)
 	opId := fmt.Sprintf("%s_%s", route.Method, route.Name)

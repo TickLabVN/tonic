@@ -1,6 +1,7 @@
 package docs
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/TickLabVN/tonic/core/utils"
@@ -30,22 +31,22 @@ type ComponentsObject struct {
 	PathItems       map[string]PathItemOrReference       `json:"pathItems,omitempty"`
 }
 
-func (c *ComponentsObject) AddSchema(t reflect.Type) bool {
+func (c *ComponentsObject) AddSchema(t reflect.Type) error {
 	if c.Schemas == nil {
 		c.Schemas = make(map[string]SchemaOrReference)
 	}
 
 	schemaName := utils.GetSchemaName(t)
 	if _, exists := c.Schemas[schemaName]; exists {
-		return false // Schema already exists
+		return fmt.Errorf("schema already exists: %s", schemaName)
 	}
 
-	schema, err := ParseSchema(t)
+	schema, err := SchemaFromType(t)
 	if err != nil {
-		return false
+		return fmt.Errorf("create schema from type: %w", err)
 	}
 	c.Schemas[schemaName] = SchemaOrReference{SchemaObject: &schema}
-	return true
+	return nil
 }
 
 func (c *ComponentsObject) AddResponse(name string, response *ResponseOrReference) {

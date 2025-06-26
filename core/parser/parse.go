@@ -2,7 +2,6 @@ package parser
 
 import (
 	"encoding/json"
-	"errors"
 	"strings"
 )
 
@@ -52,28 +51,28 @@ type ValidateFlag struct {
 	URNRfc2141      bool `json:"urn_rfc2141"`
 
 	// String
-	Alpha           bool `json:"alpha"`
-	Alphanum        bool `json:"alphanum"`
-	AlphanumUnicode bool `json:"alphanumunicode"`
-	AlphaUnicode    bool `json:"alphaunicode"`
-	ASCII           bool `json:"ascii"`
-	Boolean         bool `json:"boolean"`
-	Contains        bool `json:"contains"`
-	ContainsAny     bool `json:"containsany"`
-	ContainsRune    bool `json:"containsrune"`
-	EndsNotWith     bool `json:"endsnotwith"`
-	EndsWith        bool `json:"endswith"`
-	Excludes        bool `json:"excludes"`
-	ExcludesAll     bool `json:"excludesall"`
-	ExcludesRune    bool `json:"excludesrune"`
-	Lowercase       bool `json:"lowercase"`
-	Multibyte       bool `json:"multibyte"`
-	Number          bool `json:"number"`
-	Numeric         bool `json:"numeric"`
-	PrintASCII      bool `json:"printascii"`
-	StartsNotWith   bool `json:"startsnotwith"`
-	StartsWith      bool `json:"startswith"`
-	Uppercase       bool `json:"uppercase"`
+	Alpha           bool     `json:"alpha"`
+	Alphanum        bool     `json:"alphanum"`
+	AlphanumUnicode bool     `json:"alphanumunicode"`
+	AlphaUnicode    bool     `json:"alphaunicode"`
+	ASCII           bool     `json:"ascii"`
+	Boolean         bool     `json:"boolean"`
+	Contains        []string `json:"contains"`
+	ContainsAny     []string `json:"containsany"`
+	ContainsRune    []string `json:"containsrune"`
+	EndsNotWith     []string `json:"endsnotwith"`
+	EndsWith        []string `json:"endswith"`
+	Excludes        []string `json:"excludes"`
+	ExcludesAll     []string `json:"excludesall"`
+	ExcludesRune    []string `json:"excludesrune"`
+	Lowercase       []string `json:"lowercase"`
+	Multibyte       []string `json:"multibyte"`
+	Number          []string `json:"number"`
+	Numeric         []string `json:"numeric"`
+	PrintASCII      bool     `json:"printascii"`
+	StartsNotWith   []string `json:"startsnotwith"`
+	StartsWith      []string `json:"startswith"`
+	Uppercase       bool     `json:"uppercase"`
 
 	// Formats
 	Base64                     bool `json:"base64"`
@@ -90,6 +89,7 @@ type ValidateFlag struct {
 	SpiceDBObject              bool `json:"spicedb"`
 	Datetime                   bool `json:"datetime"`
 	E164                       bool `json:"e164"`
+	EIN                        bool `json:"ein"`
 	Email                      bool `json:"email"`
 	EthereumAddress            bool `json:"eth_addr"`
 	Hexadecimal                bool `json:"hexadecimal"`
@@ -182,10 +182,360 @@ type ComparisonFlag struct {
 	Values    []string `json:"values"`
 }
 
-func ParseValidateTag(tag string) (*ValidateFlag, error) {
+func (v *ValidateFlag) GetFormat() string {
+	if v.Base64 {
+		return "base64"
+	}
+	if v.Base64URL {
+		return "base64url"
+	}
+	if v.Base64RawURL {
+		return "base64rawurl"
+	}
+	if v.BIC {
+		return "bic"
+	}
+	if v.BCP47Language {
+		return "bcp47_language_tag"
+	}
+	if v.BTCAddress {
+		return "btc_addr"
+	}
+	if v.BTCAddressBech32 {
+		return "btc_addr_bech32"
+	}
+	if v.CreditCard {
+		return "credit_card"
+	}
+	if v.MongoDB {
+		return "mongodb"
+	}
+	if v.MongoDBConnectionString {
+		return "mongodb_connection_string"
+	}
+	if v.Cron {
+		return "cron"
+	}
+	if v.SpiceDBObject {
+		return "spicedb"
+	}
+	if v.Datetime {
+		return "datetime"
+	}
+	if v.E164 {
+		return "e164"
+	}
+	if v.EIN {
+		return "ein"
+	}
+	if v.Email {
+		return "email"
+	}
+	if v.EthereumAddress {
+		return "eth_addr"
+	}
+	if v.Hexadecimal {
+		return "hexadecimal"
+	}
+	if v.Hexcolor {
+		return "hexcolor"
+	}
+	if v.HSL {
+		return "hsl"
+	}
+	if v.HSLA {
+		return "hsla"
+	}
+	if v.HTML {
+		return "html"
+	}
+	if v.HTMLEncoded {
+		return "html_encoded"
+	}
+	if v.ISBN {
+		return "isbn"
+	}
+	if v.ISBN10 {
+		return "isbn10"
+	}
+	if v.ISBN13 {
+		return "isbn13"
+	}
+	if v.ISSN {
+		return "issn"
+	}
+	if v.ISO31661Alpha2 {
+		return "iso3166_1_alpha2"
+	}
+	if v.ISO31661Alpha3 {
+		return "iso3166_1_alpha3"
+	}
+	if v.ISO31661AlphaNumeric {
+		return "iso3166_1_alpha_numeric"
+	}
+	if v.ISO31662 {
+		return "iso3166_2"
+	}
+	if v.ISO4217 {
+		return "iso4217"
+	}
+	if v.JSON {
+		return "json"
+	}
+	if v.JWT {
+		return "jwt"
+	}
+	if v.Latitude {
+		return "latitude"
+	}
+	if v.Longitude {
+		return "longitude"
+	}
+	if v.LuhnChecksum {
+		return "luhn_checksum"
+	}
+	if v.PostcodeISO3166Alpha2 {
+		return "postcode_iso3166_alpha2"
+	}
+	if v.PostcodeISO3166Alpha2Field {
+		return "postcode_iso3166_alpha2_field"
+	}
+	if v.RGB {
+		return "rgb"
+	}
+	if v.RGBA {
+		return "rgba"
+	}
+	if v.SSN {
+		return "ssn"
+	}
+	if v.Timezone {
+		return "timezone"
+	}
+	if v.UUID {
+		return "uuid"
+	}
+	if v.UUID3 {
+		return "uuid3"
+	}
+	if v.UUID3RFC4122 {
+		return "uuid3_rfc4122"
+	}
+	if v.UUID4 {
+		return "uuid4"
+	}
+	if v.UUID4RFC4122 {
+		return "uuid4_rfc4122"
+	}
+	if v.UUID5 {
+		return "uuid5"
+	}
+	if v.UUID5RFC4122 {
+		return "uuid5_rfc4122"
+	}
+	if v.UUIDRFC4122 {
+		return "uuid_rfc4122"
+	}
+	if v.MD4 {
+		return "md4"
+	}
+	if v.MD5 {
+		return "md5"
+	}
+	if v.SHA256 {
+		return "sha256"
+	}
+	if v.SHA384 {
+		return "sha384"
+	}
+	if v.SHA512 {
+		return "sha512"
+	}
+	if v.RIPEMD128 {
+		return "ripemd128"
+	}
+	if v.RIPEMD160 {
+		return "ripemd160"
+	}
+	if v.TIGER128 {
+		return "tiger128"
+	}
+	if v.TIGER160 {
+		return "tiger160"
+	}
+	if v.TIGER192 {
+		return "tiger192"
+	}
+	if v.Semver {
+		return "semver"
+	}
+	if v.ULID {
+		return "ulid"
+	}
+	if v.CVE {
+		return "cve"
+	}
+
+	// Network
+	if v.Cidr {
+		return "cidr"
+	}
+	if v.CidrV4 {
+		return "cidrv4"
+	}
+	if v.CidrV6 {
+		return "cidrv6"
+	}
+	if v.DataURI {
+		return "datauri"
+	}
+	if v.Fqdn {
+		return "fqdn"
+	}
+	if v.Hostname {
+		return "hostname"
+	}
+	if v.HostnamePort {
+		return "hostname_port"
+	}
+	if v.HostnameRfc1123 {
+		return "hostname_rfc1123"
+	}
+	if v.IP {
+		return "ip"
+	}
+	if v.IP4Addr {
+		return "ip4_addr"
+	}
+	if v.IP6Addr {
+		return "ip6_addr"
+	}
+	if v.IPAddr {
+		return "ip_addr"
+	}
+	if v.IPv4 {
+		return "ipv4"
+	}
+	if v.IPv6 {
+		return "ipv6"
+	}
+	if v.MAC {
+		return "mac"
+	}
+	if v.TCP4Addr {
+		return "tcp4_addr"
+	}
+	if v.TCP6Addr {
+		return "tcp6_addr"
+	}
+	if v.TCPAddr {
+		return "tcp_addr"
+	}
+	if v.UDP4Addr {
+		return "udp4_addr"
+	}
+	if v.UDP6Addr {
+		return "udp6_addr"
+	}
+	if v.UDPAddr {
+		return "udp_addr"
+	}
+	if v.UnixAddr {
+		return "unix_addr"
+	}
+	if v.URI {
+		return "uri"
+	}
+	if v.URL {
+		return "url"
+	}
+	if v.HTTPURL {
+		return "http_url"
+	}
+	if v.URLEncoded {
+		return "url_encoded"
+	}
+	if v.URNRfc2141 {
+		return "urn_rfc2141"
+	}
+
+	return ""
+}
+
+func (v *ValidateFlag) GetPattern() string {
+	if v.Alpha {
+		return "^[a-zA-Z]+$"
+	}
+	if v.Alphanum {
+		return "^[a-zA-Z0-9]+$"
+	}
+	if v.AlphanumUnicode {
+		return "^[\\p{L}\\p{N}]+$"
+	}
+	if v.AlphaUnicode {
+		return "^[\\p{L}]+$"
+	}
+	if v.ASCII {
+		return "^[\\x00-\\x7F]+$"
+	}
+	if v.Boolean {
+		return "^(true|false)$"
+	}
+	if len(v.Contains) > 0 {
+		return "^.*(" + strings.Join(v.Contains, "|") + ").*$"
+	}
+	if len(v.ContainsAny) > 0 {
+		return "^.*(" + strings.Join(v.ContainsAny, "|") + ").*$"
+	}
+	if len(v.ContainsRune) > 0 {
+		return "^.*(" + strings.Join(v.ContainsRune, "|") + ").*$"
+	}
+	if len(v.EndsNotWith) > 0 {
+		return ".*(?<!(" + strings.Join(v.EndsNotWith, "|") + "))$"
+	}
+	if len(v.EndsWith) > 0 {
+		return ".*(" + strings.Join(v.EndsWith, "|") + ")$"
+	}
+	if len(v.Excludes) > 0 {
+		return "^(?!.*(" + strings.Join(v.Excludes, "|") + ")).*$"
+	}
+	if len(v.ExcludesAll) > 0 {
+		return "^(?!.*(" + strings.Join(v.ExcludesAll, "|") + ")).*$"
+	}
+	if len(v.ExcludesRune) > 0 {
+		return "^(?!.*(" + strings.Join(v.ExcludesRune, "|") + ")).*$"
+	}
+	if len(v.Lowercase) > 0 {
+		return "^[a-z]+$"
+	}
+	if len(v.Multibyte) > 0 {
+		return "^[^\\x00-\\x7F]+$"
+	}
+	if len(v.Number) > 0 {
+		return "^[+-]?\\d+(\\.\\d+)?$"
+	}
+	if len(v.Numeric) > 0 {
+		return "^[+-]?\\d+$"
+	}
+	if v.PrintASCII {
+		return "^[\\x20-\\x7E]+$"
+	}
+	if len(v.StartsNotWith) > 0 {
+		return "^(?!(" + strings.Join(v.StartsNotWith, "|") + ")).*"
+	}
+	if len(v.StartsWith) > 0 {
+		return "^(" + strings.Join(v.StartsWith, "|") + ").*"
+	}
+	if v.Uppercase {
+		return "^[A-Z]+$"
+	}
+	return ""
+}
+
+func ParseValidateTag(tag string) *ValidateFlag {
 	tag = strings.TrimSpace(tag)
 	if len(tag) == 0 {
-		return nil, errors.New("empty tag")
+		return nil
 	}
 	parts := strings.Split(tag, ",")
 	rawTag := make(map[string]any)
@@ -209,11 +559,11 @@ func ParseValidateTag(tag string) (*ValidateFlag, error) {
 	validateTag := &ValidateFlag{}
 	b, err := json.Marshal(rawTag)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 	err = json.Unmarshal(b, validateTag)
 	if err != nil {
-		return nil, err
+		return nil
 	}
-	return validateTag, nil
+	return validateTag
 }
