@@ -10,7 +10,7 @@ type OperationObject struct {
 	OperationId  string                         `json:"operationId,omitempty"`
 	Parameters   []ParameterOrReference         `json:"parameters,omitempty"`
 	RequestBody  *RequestBodyOrReference        `json:"requestBody,omitempty"`
-	Responses    []Response                     `json:"responses,omitempty"`
+	Responses    map[string]ResponseOrReference `json:"responses,omitempty"`
 	Callbacks    map[string]CallbackOrReference `json:"callbacks,omitempty"`
 	Deprecated   bool                           `json:"deprecated,omitempty"`
 	Security     []SecurityRequirement          `json:"security,omitempty"`

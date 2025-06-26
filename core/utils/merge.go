@@ -12,9 +12,13 @@ func MergeStructs[D any](values ...D) D {
 		val := reflect.ValueOf(v)
 		for i := 0; i < val.NumField(); i++ {
 			field := val.Field(i)
+			resField := resVal.Field(i)
 			if !isZero(field) {
-				resField := resVal.Field(i)
-				if resField.CanSet() {
+				// Deep merge for struct fields
+				if field.Kind() == reflect.Struct && resField.CanSet() {
+					merged := MergeStructs(resField.Interface(), field.Interface())
+					resField.Set(reflect.ValueOf(merged))
+				} else if resField.CanSet() {
 					resField.Set(field)
 				}
 			}

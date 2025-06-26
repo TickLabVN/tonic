@@ -11,5 +11,5 @@ type OpenApi struct {
 	Components        ComponentsObject               `json:"components,omitempty"`
 	Security          []SecurityRequirement          `json:"security,omitempty"`
 	Tags              []Tag                          `json:"tags,omitempty"`
-	ExternalDocs      ExternalDocumentationObject    `json:"externalDocs,omitempty"`
+	ExternalDocs      *ExternalDocumentationObject    `json:"externalDocs,omitempty"`
 }

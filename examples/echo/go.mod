@@ -1,4 +1,4 @@
-module github.com/TickLabVN/tonic/example/echo
+module echo_example
 
 go 1.24.2
 
@@ -16,14 +16,13 @@ require (
 )
 
 require (
-	github.com/TickLabVN/tonic/adapters/echo v0.0.0-20250626064844-6eb49b9d8bf9
-	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/leodido/go-urn v1.4.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
+	golang.org/x/crypto v0.39.0 // indirect
+	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/text v0.26.0 // indirect
 )
