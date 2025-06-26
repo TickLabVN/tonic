@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 
+	echoadapter "github.com/TickLabVN/tonic/adapters/echo"
 	"github.com/TickLabVN/tonic/core/docs"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -47,12 +47,8 @@ func GetUser(c echo.Context) error {
 	})
 }
 
-func wrapHandler[D any, R any](e *echo.Echo, spec *docs.OpenApi, path string, h echo.HandlerFunc) {
-	input, resp := reflect.TypeOf(new(D)), reflect.TypeOf(new(R))
-	spec.Components.AddSchema(input)
-	spec.Components.AddSchema(resp)
-
-	e.GET(path, func(c echo.Context) error {
+func bindingMiddleware[D any](next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
 		var data D
 		if err := c.Bind(&data); err != nil {
 			return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid input"})
@@ -61,8 +57,8 @@ func wrapHandler[D any, R any](e *echo.Echo, spec *docs.OpenApi, path string, h 
 			return c.JSON(http.StatusBadRequest, validateErrorMapping(err))
 		}
 		c.Set("data", data)
-		return h(c)
-	})
+		return next(c)
+	}
 }
 
 func main() {
@@ -81,8 +77,8 @@ func main() {
 			},
 		},
 	}
+	echoadapter.[GetUserRequest, User](e.GET("/users/:id", GetUser, echoadapter.WithName("GetUser")), openApiSpec)
 
-	wrapHandler[GetUserRequest, User](e, openApiSpec, "/user/:id", GetUser)
 	specJson, _ := json.MarshalIndent(openApiSpec, "", "  ")
 	fmt.Println("OpenAPI Specification:", string(specJson))
 	e.Logger.Fatal(e.Start(":1323"))

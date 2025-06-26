@@ -2,7 +2,7 @@ package docs
 
 // TODO: Add ExternalDocs, Parameter Object, Request Body Object, Responses Object, Callback Object, Security Requirement Object, Server Object
 // https://swagger.io/specification/#operation-object
-type Operation struct {
+type OperationObject struct {
 	Tags         []string                       `json:"tags,omitempty"`
 	Summary      string                         `json:"summary,omitempty"`
 	Description  string                         `json:"description,omitempty"`

@@ -127,9 +127,9 @@ func TestMarshalMap(t *testing.T) {
 
 // go test -v -run TestMarshalSpec github.com/TickLabVN/tonic/core/json
 func TestMarshalSpec(t *testing.T) {
-	paths := docs.NewPaths()
+	paths := docs.Paths{}
 	paths.AddPath("/categories", docs.PathItemObject{
-		Get: &docs.Operation{
+		Get: &docs.OperationObject{
 			Description: "Returns all categories from the system that the user has access to",
 			Parameters: []docs.ParameterOrReference{
 				{
