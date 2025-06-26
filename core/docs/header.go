@@ -17,6 +17,6 @@ type HeaderObject struct {
 }
 
 type HeaderOrReference struct {
-	Header    *HeaderObject    `json:",inline,omitempty"`
-	Reference *ReferenceObject `json:",inline,omitempty"`
+	*HeaderObject    `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
 }

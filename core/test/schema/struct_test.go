@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/TickLabVN/tonic/core"
-	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,7 +24,7 @@ func TestStructWithPrimitiveField(t *testing.T) {
 
 	spec := core.Init()
 
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 
 	assert.JSONEq(`{
@@ -61,7 +60,7 @@ func TestStructWithCompoundField(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -95,7 +94,7 @@ func TestStructWithStructPointerField(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 
 	assert.JSONEq(`{
@@ -125,7 +124,7 @@ func TestStructWithFieldIsArrayOfStruct(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -160,7 +159,7 @@ func TestStructWithPrimitivePointerType(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -188,7 +187,7 @@ func TestStructWithTimeField(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -214,7 +213,7 @@ func TestEmbeddedField(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -245,7 +244,7 @@ func TestMultiEmbeddedField(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -274,7 +273,7 @@ func TestEmbeddedFieldWithOverlappedProperties(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",
@@ -294,7 +293,7 @@ func TestStructWithMapField(t *testing.T) {
 	}
 
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, User{})
+	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 	assert.JSONEq(`{
 		"type": "object",

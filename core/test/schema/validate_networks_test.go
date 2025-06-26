@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/TickLabVN/tonic/core"
+	"github.com/TickLabVN/tonic/core/docs"
 	"github.com/TickLabVN/tonic/core/utils"
-	"github.com/TickLabVN/tonic/core/validator"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +45,7 @@ func TestValidate_Networks(t *testing.T) {
 	assert := assert.New(t)
 	dt := reflect.TypeOf(Test{})
 
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}

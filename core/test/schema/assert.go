@@ -1,16 +1,17 @@
-package utils
+package schema_test
 
 import (
 	"encoding/json"
 	"reflect"
 
 	"github.com/TickLabVN/tonic/core/docs"
+	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
 
 func AssertParse(assert *assert.Assertions, spec *docs.OpenApi, data any) (string, error) {
 	dt := reflect.TypeOf(data)
-	schemaName := GetSchemaPath(dt)
+	schemaName := utils.GetSchemaPath(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]
 	assert.True(ok)

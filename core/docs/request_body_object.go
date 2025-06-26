@@ -8,6 +8,6 @@ type RequestBody struct {
 }
 
 type RequestBodyOrReference struct {
-	RequestBody *RequestBody     `json:",inline,omitempty"`
-	Reference   *ReferenceObject `json:",inline,omitempty"`
+	*RequestBody     `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
 }

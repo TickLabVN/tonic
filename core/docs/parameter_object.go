@@ -21,6 +21,6 @@ type ParameterObject struct {
 }
 
 type ParameterOrReference struct {
-	Parameter *ParameterObject `json:",inline,omitempty"`
-	Reference *ReferenceObject `json:",inline,omitempty"`
+	*ParameterObject `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
 }

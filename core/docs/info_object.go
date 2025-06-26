@@ -1,7 +1,7 @@
 package docs
 
 // https://swagger.io/specification/#info-object
-type Infoobject struct {
+type InfoObject struct {
 	Title          string         `json:"title" validate:"required"`
 	Summary        string         `json:"summary,omitempty"`
 	Description    string         `json:"description,omitempty"`

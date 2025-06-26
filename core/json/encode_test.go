@@ -133,14 +133,14 @@ func TestMarshalSpec(t *testing.T) {
 			Description: "Returns all categories from the system that the user has access to",
 			Parameters: []docs.ParameterOrReference{
 				{
-					Reference: &docs.ReferenceObject{
+					ReferenceObject: &docs.ReferenceObject{
 						Description: "A parameter",
 						Summary:     "A parameter",
 						Ref:         "#/components/parameters/limitParam",
 					},
 				},
 				{
-					Parameter: &docs.ParameterObject{
+					ParameterObject: &docs.ParameterObject{
 						Name: "skip",
 						In:   "query",
 					},

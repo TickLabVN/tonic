@@ -14,6 +14,6 @@ type ExampleObject struct {
 }
 
 type ExampleOrReference struct {
-	Example   *ExampleObject   `json:",inline,omitempty"`
-	Reference *ReferenceObject `json:",inline,omitempty"`
+	*ExampleObject   `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
 }

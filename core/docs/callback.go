@@ -7,6 +7,6 @@ package docs
 type CallbackObject map[string]ParameterOrReference
 
 type CallbackOrReference struct {
-	Callback  *CallbackObject  `json:",inline,omitempty"`
-	Reference *ReferenceObject `json:",inline,omitempty"`
+	*CallbackObject  `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
 }

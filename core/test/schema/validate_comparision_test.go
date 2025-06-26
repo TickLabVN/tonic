@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/TickLabVN/tonic/core"
+	"github.com/TickLabVN/tonic/core/docs"
 	"github.com/TickLabVN/tonic/core/utils"
-	"github.com/TickLabVN/tonic/core/validator"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +23,7 @@ func TestValidate_Comparision_Eq(t *testing.T) {
 	}
 
 	dt := reflect.TypeOf(TestEq{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -80,7 +80,7 @@ func TestValidate_Comparision_EqIgnoreCase(t *testing.T) {
 	}
 
 	dt := reflect.TypeOf(TestEqIgnoreCase{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -117,7 +117,7 @@ func TestValidate_Comparision_Gt(t *testing.T) {
 		InterestedList []string `json:"interestedList" validate:"gt=2"`
 	}
 	dt := reflect.TypeOf(TestGt{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,7 +170,7 @@ func TestValidate_Comparision_Gte(t *testing.T) {
 		RecoverEmails []string `json:"recoverEmails" validate:"gte=1"`
 	}
 	dt := reflect.TypeOf(TestGt{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -219,7 +219,7 @@ func TestValidate_Comparision_Lt(t *testing.T) {
 		InterestedList []string `json:"interestedList" validate:"lt=2"`
 	}
 	dt := reflect.TypeOf(TestLt{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -272,7 +272,7 @@ func TestValidate_Comparision_Lte(t *testing.T) {
 		InterestedList []string `json:"interestedList" validate:"lte=2"`
 	}
 	dt := reflect.TypeOf(TestLt{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -325,7 +325,7 @@ func TestValidate_Comparision_Ne(t *testing.T) {
 	}
 
 	dt := reflect.TypeOf(TestEq{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -388,7 +388,7 @@ func TestValidate_Comparision_NeIgnoreCase(t *testing.T) {
 	}
 
 	dt := reflect.TypeOf(TestEq{})
-	err := validator.ParseStruct(dt)
+	_, err := docs.ParseSchema(dt)
 	if err != nil {
 		t.Fatal(err)
 	}

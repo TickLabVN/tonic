@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/TickLabVN/tonic/core"
-	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -76,7 +75,7 @@ func TestValidate_Format(t *testing.T) {
 	}
 	assert := assert.New(t)
 	spec := core.Init()
-	schema, err := utils.AssertParse(assert, spec, Test{})
+	schema, err := AssertParse(assert, spec, Test{})
 	assert.Nil(err)
 
 	assert.JSONEq(`{

@@ -1,5 +1,11 @@
 package docs
 
+import (
+	"reflect"
+
+	"github.com/TickLabVN/tonic/core/utils"
+)
+
 // Field Name	Type	Description
 // schemas	Map[string, Schema Object]	An object to hold reusable Schema Objects.
 // responses	Map[string, Response Object | Reference Object]	An object to hold reusable Response Objects.
@@ -24,15 +30,22 @@ type ComponentsObject struct {
 	PathItems       map[string]PathItemOrReference       `json:"pathItems,omitempty"`
 }
 
-func NewComponents() *ComponentsObject {
-	return &ComponentsObject{}
-}
-
-func (c *ComponentsObject) AddSchema(name string, schema *SchemaObject) {
+func (c *ComponentsObject) AddSchema(t reflect.Type) bool {
 	if c.Schemas == nil {
 		c.Schemas = make(map[string]SchemaOrReference)
 	}
-	c.Schemas[name] = SchemaOrReference{Schema: schema}
+
+	schemaName := utils.GetSchemaName(t)
+	if _, exists := c.Schemas[schemaName]; exists {
+		return false // Schema already exists
+	}
+
+	schema, err := ParseSchema(t)
+	if err != nil {
+		return false
+	}
+	c.Schemas[schemaName] = SchemaOrReference{SchemaObject: &schema}
+	return true
 }
 
 func (c *ComponentsObject) AddResponse(name string, response *ResponseOrReference) {

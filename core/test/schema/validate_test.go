@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/TickLabVN/tonic/core/validator"
+	"github.com/TickLabVN/tonic/core/parser"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,11 +31,11 @@ func TestParseTag(t *testing.T) {
 	userType := reflect.TypeOf(user)
 	t.Log("User type:", userType.Name(), userType.PkgPath())
 
-	fieldValidations := make(map[string]validator.ValidateFlag)
+	fieldValidations := make(map[string]parser.ValidateFlag)
 	for i := 0; i < userType.NumField(); i++ {
 		field := userType.Field(i)
 		tag := field.Tag.Get("validate")
-		tagObj, err := validator.ParseValidateTag(tag)
+		tagObj, err := parser.ParseValidateTag(tag)
 		if err != nil {
 			t.Fatal(err)
 		}

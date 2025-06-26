@@ -19,6 +19,6 @@ type LinkObject struct {
 }
 
 type LinkOrReference struct {
-	Link      *LinkObject      `json:",inline,omitempty"`
-	Reference *ReferenceObject `json:",inline,omitempty"`
+	*LinkObject      `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
 }

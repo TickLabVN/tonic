@@ -1,5 +1,9 @@
 package docs
 
+import (
+	"reflect"
+)
+
 type Number struct {
 	Minimum float64   `json:"minimum,omitempty"`
 	Maximum float64   `json:"maximum,omitempty"`
@@ -69,6 +73,12 @@ type SchemaObject struct {
 }
 
 type SchemaOrReference struct {
-	Schema    *SchemaObject    `json:",inline,omitempty"`
-	Reference *ReferenceObject `json:",inline,omitempty"`
+	*SchemaObject    `json:",inline,omitempty"`
+	*ReferenceObject `json:",inline,omitempty"`
+}
+
+func ParseSchema(field reflect.Type) (SchemaObject, error) {
+	schema := SchemaObject{}
+	schema.Type = "object"
+	return schema, nil
 }
