@@ -19,7 +19,7 @@ type Route struct {
 
 func AddRoute[D any, R any](spec *docs.OpenApi, g gin.IRoutes, route Route) {
 	_, resp := reflect.TypeOf(new(D)), reflect.TypeOf(new(R))
-	spec.Components.AddSchema(resp)
+	spec.Components.AddSchema(resp, "binding")
 
 	var basePath string
 	group, ok := g.(*gin.RouterGroup)

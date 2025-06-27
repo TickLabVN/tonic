@@ -2,21 +2,19 @@ package docs
 
 import (
 	"fmt"
+	"maps"
 	"reflect"
 	"strconv"
 	"strings"
-
-	"github.com/TickLabVN/tonic/core/parser"
 )
 
 type Number struct {
 	Minimum float64   `json:"minimum,omitempty"`
 	Maximum float64   `json:"maximum,omitempty"`
 	Enum    []float64 `json:"enum,omitempty"`
-	Format  string    `json:"format,omitempty"`
 }
 
-func (n *Number) Bind(v parser.ValidateFlag) {
+func (n *Number) Bind(v ValidateFlag) {
 	if v.Min != "" {
 		n.Minimum, _ = strconv.ParseFloat(v.Min, 64)
 	}
@@ -35,10 +33,9 @@ type Integer struct {
 	Minimum int     `json:"minimum,omitempty"`
 	Maximum int     `json:"maximum,omitempty"`
 	Enum    []int64 `json:"enum,omitempty"`
-	Format  string  `json:"format,omitempty"`
 }
 
-func (i *Integer) Bind(v parser.ValidateFlag) {
+func (i *Integer) Bind(v ValidateFlag) {
 	if v.Min != "" {
 		i.Minimum, _ = strconv.Atoi(v.Min)
 	}
@@ -58,10 +55,9 @@ type String struct {
 	Maximum int      `json:"maximum,omitempty"`
 	Pattern string   `json:"pattern,omitempty"`
 	Enum    []string `json:"enum,omitempty"`
-	Format  string   `json:"format,omitempty"`
 }
 
-func (s *String) Bind(v parser.ValidateFlag) {
+func (s *String) Bind(v ValidateFlag) {
 	if v.Min != "" {
 		s.Minimum, _ = strconv.Atoi(v.Min)
 	}
@@ -72,7 +68,6 @@ func (s *String) Bind(v parser.ValidateFlag) {
 	if v.OneOf != nil {
 		s.Enum = v.OneOf
 	}
-	s.Format = v.GetFormat()
 }
 
 type Object struct {
@@ -87,7 +82,7 @@ type Array struct {
 	Maximum int           `json:"maximum,omitempty"`
 }
 
-func (a *Array) Bind(v parser.ValidateFlag) {
+func (a *Array) Bind(v ValidateFlag) {
 	if v.Min != "" {
 		a.Minimum, _ = strconv.Atoi(v.Min)
 	}
@@ -135,7 +130,8 @@ type SchemaOrReference struct {
 	*ReferenceObject `json:",inline,omitempty"`
 }
 
-func SchemaFromType(t reflect.Type) (SchemaObject, error) {
+// Gin framework use "binding" tag, for example: `binding:"required,min=1,max=10"`
+func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (SchemaObject, error) {
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
@@ -146,14 +142,53 @@ func SchemaFromType(t reflect.Type) (SchemaObject, error) {
 	if err != nil {
 		return schema, err
 	}
-
-	switch schema.Type {
-	case "array":
-		s, err := SchemaFromType(t.Elem())
+	if schema.Type == "map" {
+		schema.Type = "object"
+		additionalProp, err := SchemaFromType(t.Elem(), bindingKey, flag)
 		if err != nil {
 			return schema, err
 		}
-		schema.Items = &s
+		schema.Object = &Object{
+			AdditionalProperties: &additionalProp,
+		}
+		return schema, nil
+	}
+
+	switch schema.Type {
+	case "datetime":
+		schema.Type = "string"
+		schema.Format = "date-time"
+	case "integer":
+		schema.Integer = &Integer{}
+		if flag != nil {
+			schema.Integer.Bind(*flag)
+		}
+		schema.Format = REFLECT_TYPE_MAP[t.Kind()]
+	case "number":
+		schema.Number = &Number{}
+		if flag != nil {
+			schema.Number.Bind(*flag)
+		}
+		schema.Format = REFLECT_TYPE_MAP[t.Kind()]
+	case "string":
+		schema.String = &String{}
+		if flag != nil {
+			schema.String.Bind(*flag)
+			schema.Format = flag.GetFormat()
+		}
+	case "boolean":
+		// No additional properties for boolean
+	case "array":
+		s, err := SchemaFromType(t.Elem(), bindingKey, nil)
+		if err != nil {
+			return schema, err
+		}
+		schema.Array = &Array{
+			Items: &s,
+		}
+		if flag != nil {
+			schema.Array.Bind(*flag)
+		}
 	case "object":
 		schema.Object = &Object{
 			Properties: make(map[string]SchemaObject),
@@ -162,48 +197,62 @@ func SchemaFromType(t reflect.Type) (SchemaObject, error) {
 
 		for i := 0; i < t.NumField(); i++ {
 			field := t.Field(i)
-			validateTag := field.Tag.Get("validate")
-			jsonAttrs := strings.Split(field.Tag.Get("json"), ",")
-			if len(jsonAttrs) == 0 || jsonAttrs[0] == "-" {
-				// Skip fields with no JSON tag or ignored fields
+			// For embedded structs, we need to handle them differently
+			if field.Anonymous {
+				embeddedSchema, err := SchemaFromType(field.Type, bindingKey, nil)
+				if err != nil {
+					return schema, fmt.Errorf("create schema from type %s: %w", field.Type.String(), err)
+				}
+				maps.Copy(schema.Properties, embeddedSchema.Properties)
+				schema.Required = append(schema.Required, embeddedSchema.Required...)
 				continue
 			}
-			fieldName := jsonAttrs[0]
 
-			propertyType, err := toSwaggerType(field.Type)
-			if err != nil {
-				return schema, err
+			validateTag := field.Tag.Get(bindingKey)
+			jsonAttrs := strings.Split(field.Tag.Get("json"), ",")
+			var fieldName string
+			if len(jsonAttrs) > 0 && jsonAttrs[0] != "" {
+				fieldName = jsonAttrs[0]
+			} else {
+				fieldName = field.Name
 			}
-			validateOptions := parser.ParseValidateTag(validateTag)
+			validateOptions, err := ParseValidateTag(validateTag)
+			if err != nil {
+				return schema, fmt.Errorf("parse validate tag for field %s: %w", fieldName, err)
+			}
 
-			switch propertyType {
-			case "array":
-				item, err := SchemaFromType(field.Type.Elem())
-				if err != nil {
-					return schema, err
-				}
-				property := SchemaObject{
-					Type: "array",
-					Array: &Array{
-						Items: &item,
-					},
-				}
-				if validateOptions != nil {
-					property.Array.Bind(*validateOptions)
-				}
-				schema.Properties[fieldName] = property
-			default:
-				schema.Properties[fieldName], err = SchemaFromType(field.Type)
-				if err != nil {
-					return schema, err
-				}
+			schema.Properties[fieldName], err = SchemaFromType(field.Type, bindingKey, validateOptions)
+			if err != nil {
+				return schema, fmt.Errorf("create schema from type %s: %w", field.Type.String(), err)
+			}
+
+			if validateOptions != nil && validateOptions.Required {
+				schema.Required = append(schema.Required, fieldName)
 			}
 		}
 	}
 	return schema, nil
 }
 
+var REFLECT_TYPE_MAP = map[reflect.Kind]string{
+	reflect.Int:     "int32",
+	reflect.Int8:    "int8",
+	reflect.Int16:   "int16",
+	reflect.Int32:   "int32",
+	reflect.Int64:   "int64",
+	reflect.Uint:    "uint",
+	reflect.Uint8:   "uint8",
+	reflect.Uint16:  "uint16",
+	reflect.Uint32:  "uint32",
+	reflect.Uint64:  "uint64",
+	reflect.Float32: "float32",
+	reflect.Float64: "float64",
+}
+
 func toSwaggerType(t reflect.Type) (string, error) {
+	if t.PkgPath() == "time" && t.Name() == "Time" {
+		return "datetime", nil // Time is represented as datetime in OpenAPI
+	}
 	switch t.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return "integer", nil
@@ -217,7 +266,9 @@ func toSwaggerType(t reflect.Type) (string, error) {
 		return "boolean", nil
 	case reflect.Slice, reflect.Array:
 		return "array", nil
-	case reflect.Map, reflect.Struct, reflect.Interface:
+	case reflect.Map:
+		return "map", nil
+	case reflect.Struct, reflect.Interface:
 		return "object", nil
 	case reflect.Pointer:
 		return toSwaggerType(t.Elem())

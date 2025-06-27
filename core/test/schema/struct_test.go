@@ -23,7 +23,6 @@ func TestStructWithPrimitiveField(t *testing.T) {
 	}
 
 	spec := core.Init()
-
 	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
 
@@ -34,14 +33,14 @@ func TestStructWithPrimitiveField(t *testing.T) {
 				"type": "integer",
 				"format": "int32"
 			},
-			"age": { type: "integer", "format": "int32" },
-			"created_at": { type: "integer", "format": "int64" },
-			"username": { type: "string" },
-			"email": { type: "string", "format": "email" },
-			"balance": { type: "number", "format": "double" },	
-			"score": { type: "number", "format": "float" },
-			"disabled": { type: "boolean" },
-			"Remarks": { type: "string" }
+			"age": { "type": "integer", "format": "int32" },
+			"created_at": { "type": "integer", "format": "int64" },
+			"username": { "type": "string" },
+			"email": { "type": "string" },
+			"balance": { "type": "number", "format": "float64" },
+			"score": { "type": "number", "format": "float32" },
+			"disabled": { "type": "boolean" },
+			"Remarks": { "type": "string" }
 		}
 	}`, schema)
 }
@@ -74,7 +73,7 @@ func TestStructWithCompoundField(t *testing.T) {
 				"properties": {
 					"firstName": { "type": "string" },
 					"lastName": { "type": "string" },
-					"age": { "type": "integer" }
+					"age": { "type": "integer", "format": "int32" }
 				}
 			}
 		}
@@ -105,7 +104,7 @@ func TestStructWithStructPointerField(t *testing.T) {
 				"properties": {
 					"firstName": { "type": "string" },
 					"lastName": { "type": "string" },
-					"age": { "type": "integer" }
+					"age": { "type": "integer", "format": "int32" }
 				}
 			}
 		}
@@ -136,7 +135,7 @@ func TestStructWithFieldIsArrayOfStruct(t *testing.T) {
 					"properties": {
 						"firstName": { "type": "string" },
 						"lastName": { "type": "string" },
-						"age": { "type": "integer" }
+						"age": { "type": "integer", "format": "int32" }
 					}
 				}
 			}
@@ -161,6 +160,7 @@ func TestStructWithPrimitivePointerType(t *testing.T) {
 	spec := core.Init()
 	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
+
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
@@ -168,20 +168,19 @@ func TestStructWithPrimitivePointerType(t *testing.T) {
 				"type": "integer",
 				"format": "int32"
 			},
-			"age": { type: "integer", "format": "int32" },
-			"created_at": { type: "integer", "format": "int64" },
-			"username": { type: "string" },
-			"email": { type: "string", "format": "email" },
-			"balance": { type: "number", "format": "double" },	
-			"score": { type: "number", "format": "float" },
-			"disabled": { type: "boolean" },
-			"remarks": { type: "string" }
+			"age": { "type": "integer", "format": "int32" },
+			"created_at": { "type": "integer", "format": "int64" },
+			"username": { "type": "string" },
+			"email": { "type": "string" },
+			"balance": { "type": "number", "format": "float64" },
+			"score": { "type": "number", "format": "float32" },
+			"disabled": { "type": "boolean" },
+			"remarks": { "type": "string" }
 		}
 	}`, schema)
 }
 func TestStructWithTimeField(t *testing.T) {
 	assert := assert.New(t)
-
 	type User struct {
 		CreatedAt time.Time `json:"created_at"`
 	}
@@ -194,7 +193,7 @@ func TestStructWithTimeField(t *testing.T) {
 		"properties": {
 			"created_at": {
 				"type": "string",
-				"format": "date"
+				"format": "date-time"
 			}
 		}
 	}`, schema)
@@ -215,12 +214,13 @@ func TestEmbeddedField(t *testing.T) {
 	spec := core.Init()
 	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
+
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
 			"firstName": { "type": "string" },
 			"lastName": { "type": "string" },
-			"age": { "type": "integer" },
+			"age": { "type": "integer", "format": "int32" },
 			"username": { "type": "string" }
 		}
 	}`, schema)
@@ -251,7 +251,7 @@ func TestMultiEmbeddedField(t *testing.T) {
 		"properties": {
 			"firstName": { "type": "string" },
 			"lastName": { "type": "string" },
-			"age": { "type": "integer" },
+			"age": { "type": "integer", "format": "int32" },
 			"street": { "type": "string" },
 			"city": { "type": "string" },
 			"username": { "type": "string" }
@@ -275,12 +275,13 @@ func TestEmbeddedFieldWithOverlappedProperties(t *testing.T) {
 	spec := core.Init()
 	schema, err := AssertParse(assert, spec, User{})
 	assert.Nil(err)
+
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
 			"firstName": { "type": "string" },
 			"lastName": { "type": "string" },
-			"age": { "type": "integer" },
+			"age": { "type": "integer", "format": "int32" },
 			"username": { "type": "string" }
 		}
 	}`, schema)
@@ -289,7 +290,7 @@ func TestStructWithMapField(t *testing.T) {
 	assert := assert.New(t)
 
 	type User struct {
-		Properties map[string]string `json:"properties"`
+		Settings map[string]string `json:"settings"`
 	}
 
 	spec := core.Init()
@@ -298,7 +299,7 @@ func TestStructWithMapField(t *testing.T) {
 	assert.JSONEq(`{
 		"type": "object",
 		"properties": {
-			"properties": {
+			"settings": {
 				"type": "object",
 				"additionalProperties": {
 					"type": "string"

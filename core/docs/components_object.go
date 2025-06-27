@@ -31,17 +31,18 @@ type ComponentsObject struct {
 	PathItems       map[string]PathItemOrReference       `json:"pathItems,omitempty"`
 }
 
-func (c *ComponentsObject) AddSchema(t reflect.Type) error {
+func (c *ComponentsObject) AddSchema(t reflect.Type, bindingKey string) error {
 	if c.Schemas == nil {
 		c.Schemas = make(map[string]SchemaOrReference)
 	}
 
 	schemaName := utils.GetSchemaName(t)
 	if _, exists := c.Schemas[schemaName]; exists {
-		return fmt.Errorf("schema already exists: %s", schemaName)
+		// Schema already exists, no need to add it again
+		return nil
 	}
 
-	schema, err := SchemaFromType(t)
+	schema, err := SchemaFromType(t, bindingKey, nil)
 	if err != nil {
 		return fmt.Errorf("create schema from type: %w", err)
 	}

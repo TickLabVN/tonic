@@ -1,8 +1,11 @@
-package parser
+package docs
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
+
+	"github.com/TickLabVN/tonic/core/errors"
 )
 
 type ValidateFlag struct {
@@ -532,10 +535,10 @@ func (v *ValidateFlag) GetPattern() string {
 	return ""
 }
 
-func ParseValidateTag(tag string) *ValidateFlag {
+func ParseValidateTag(tag string) (*ValidateFlag, error) {
 	tag = strings.TrimSpace(tag)
 	if len(tag) == 0 {
-		return nil
+		return nil, nil
 	}
 	parts := strings.Split(tag, ",")
 	rawTag := make(map[string]any)
@@ -559,11 +562,11 @@ func ParseValidateTag(tag string) *ValidateFlag {
 	validateTag := &ValidateFlag{}
 	b, err := json.Marshal(rawTag)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("%w: marshalling error %v", errors.ErrParseValidateTag, err)
 	}
 	err = json.Unmarshal(b, validateTag)
 	if err != nil {
-		return nil
+		return nil, fmt.Errorf("%w: unmarshalling error %v", errors.ErrParseValidateTag, err)
 	}
-	return validateTag
+	return validateTag, nil
 }

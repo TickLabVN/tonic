@@ -11,7 +11,8 @@ import (
 
 func AssertParse(assert *assert.Assertions, spec *docs.OpenApi, data any) (string, error) {
 	dt := reflect.TypeOf(data)
-	schemaName := utils.GetSchemaPath(dt)
+	spec.Components.AddSchema(dt, "validate")
+	schemaName := utils.GetSchemaName(dt)
 
 	schema, ok := spec.Components.Schemas[schemaName]
 	assert.True(ok)

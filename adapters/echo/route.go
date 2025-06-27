@@ -12,7 +12,7 @@ import (
 
 func AddRoute[D any, R any](spec *docs.OpenApi, route *echo.Route, opts ...docs.OperationObject) {
 	_, resp := reflect.TypeOf(new(D)), reflect.TypeOf(new(R))
-	err := spec.Components.AddSchema(resp)
+	err := spec.Components.AddSchema(resp, "validate")
 	if err != nil {
 		fmt.Printf("Error adding schema: %v\n", err)
 		return
@@ -63,5 +63,6 @@ func AddRoute[D any, R any](spec *docs.OpenApi, route *echo.Route, opts ...docs.
 	default:
 		fmt.Printf("Unsupported HTTP method: %s\n", route.Method)
 	}
+	fmt.Printf("Adding route: %s %s, %+v\n", route.Method, route.Path, op)
 	spec.Paths.Update(route.Path, pathItem)
 }
