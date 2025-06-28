@@ -60,7 +60,6 @@ import (
 	"net/http"
 
 	"echo_example/middlewares"
-	"echo_example/utils"
 
 	echoAdapter "github.com/TickLabVN/tonic/adapters/echo"
 	"github.com/TickLabVN/tonic/core/docs"
@@ -81,7 +80,13 @@ type User struct {
 }
 
 func GetUser(c echo.Context) error {
-	data := c.Get("data").(GetUserRequest)
+	var data GetUserRequest
+    if err := c.Bind(&data); err != nil {
+        return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid input"})
+    }
+    if err := c.Validate(&data); err != nil {
+        return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid input"})
+    }
 	return c.JSON(http.StatusOK, User{
 		ID:    data.ID,
 		Name:  "John Doe",
@@ -103,7 +108,7 @@ func main() {
 
 	echoAdapter.AddRoute[GetUserRequest, User](
 		openapi,
-		e.GET("/users/:id", GetUser, middlewares.Bind[GetUserRequest]),
+		e.GET("/users/:id", GetUser),
 	)
 	echoAdapter.UIHandle(e, openapi, "/docs")
 
