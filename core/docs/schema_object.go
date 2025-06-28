@@ -9,9 +9,8 @@ import (
 )
 
 type Number struct {
-	Minimum float64   `json:"minimum,omitempty"`
-	Maximum float64   `json:"maximum,omitempty"`
-	Enum    []float64 `json:"enum,omitempty"`
+	Minimum float64 `json:"minimum,omitempty"`
+	Maximum float64 `json:"maximum,omitempty"`
 }
 
 func (n *Number) Bind(v ValidateFlag) {
@@ -21,18 +20,11 @@ func (n *Number) Bind(v ValidateFlag) {
 	if v.Max != "" {
 		n.Maximum, _ = strconv.ParseFloat(v.Max, 64)
 	}
-	if v.OneOf != nil {
-		n.Enum = make([]float64, len(v.OneOf))
-		for i, val := range v.OneOf {
-			n.Enum[i], _ = strconv.ParseFloat(val, 64)
-		}
-	}
 }
 
 type Integer struct {
-	Minimum int     `json:"minimum,omitempty"`
-	Maximum int     `json:"maximum,omitempty"`
-	Enum    []int64 `json:"enum,omitempty"`
+	Minimum int `json:"minimum,omitempty"`
+	Maximum int `json:"maximum,omitempty"`
 }
 
 func (i *Integer) Bind(v ValidateFlag) {
@@ -42,32 +34,22 @@ func (i *Integer) Bind(v ValidateFlag) {
 	if v.Max != "" {
 		i.Maximum, _ = strconv.Atoi(v.Max)
 	}
-	if v.OneOf != nil {
-		i.Enum = make([]int64, len(v.OneOf))
-		for j, val := range v.OneOf {
-			i.Enum[j], _ = strconv.ParseInt(val, 10, 64)
-		}
-	}
 }
 
 type String struct {
-	Minimum int      `json:"minimum,omitempty"`
-	Maximum int      `json:"maximum,omitempty"`
-	Pattern string   `json:"pattern,omitempty"`
-	Enum    []string `json:"enum,omitempty"`
+	MinLength int    `json:"minLength,omitempty"`
+	MaxLength int    `json:"maxLength,omitempty"`
+	Pattern   string `json:"pattern,omitempty"`
 }
 
 func (s *String) Bind(v ValidateFlag) {
 	if v.Min != "" {
-		s.Minimum, _ = strconv.Atoi(v.Min)
+		s.MinLength, _ = strconv.Atoi(v.Min)
 	}
 	if v.Max != "" {
-		s.Maximum, _ = strconv.Atoi(v.Max)
+		s.MaxLength, _ = strconv.Atoi(v.Max)
 	}
 	s.Pattern = v.GetPattern()
-	if v.OneOf != nil {
-		s.Enum = v.OneOf
-	}
 }
 
 type Object struct {
@@ -77,17 +59,17 @@ type Object struct {
 }
 
 type Array struct {
-	Items   *SchemaObject `json:"items,omitempty"`
-	Minimum int           `json:"minimum,omitempty"`
-	Maximum int           `json:"maximum,omitempty"`
+	Items    *SchemaObject `json:"items,omitempty"`
+	MinItems int           `json:"minItems,omitempty"`
+	MaxItems int           `json:"maxItems,omitempty"`
 }
 
 func (a *Array) Bind(v ValidateFlag) {
 	if v.Min != "" {
-		a.Minimum, _ = strconv.Atoi(v.Min)
+		a.MinItems, _ = strconv.Atoi(v.Min)
 	}
 	if v.Max != "" {
-		a.Maximum, _ = strconv.Atoi(v.Max)
+		a.MaxItems, _ = strconv.Atoi(v.Max)
 	}
 }
 
@@ -113,6 +95,7 @@ type SchemaObject struct {
 	*String  `json:",inline"`
 	*Object  `json:",inline" validate:"required_if=type object"`
 	*Array   `json:",inline" validate:"required_if=type array"`
+	Enum     []any `json:"enum,omitempty" validate:"omitempty,unique"` // Enum values for string, number, integer types
 
 	AllOf []SchemaOrReference `json:"allOf,omitempty"`
 	AnyOf []SchemaOrReference `json:"anyOf,omitempty"`
@@ -131,7 +114,7 @@ type SchemaOrReference struct {
 }
 
 // Gin framework use "binding" tag, for example: `binding:"required,min=1,max=10"`
-func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (SchemaObject, error) {
+func SchemaFromType(t reflect.Type, parsingKey string, validateKey string, flag *ValidateFlag) (SchemaObject, error) {
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
@@ -144,7 +127,7 @@ func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (Sche
 	}
 	if schema.Type == "map" {
 		schema.Type = "object"
-		additionalProp, err := SchemaFromType(t.Elem(), bindingKey, flag)
+		additionalProp, err := SchemaFromType(t.Elem(), parsingKey, validateKey, flag)
 		if err != nil {
 			return schema, err
 		}
@@ -162,12 +145,34 @@ func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (Sche
 		schema.Integer = &Integer{}
 		if flag != nil {
 			schema.Integer.Bind(*flag)
+			if len(flag.Eq) > 0 || len(flag.OneOf) > 0 {
+				schema.Enum = make([]any, 0, len(flag.Eq)+len(flag.OneOf))
+				for _, val := range flag.Eq {
+					valFloat, _ := strconv.Atoi(val)
+					schema.Enum = append(schema.Enum, valFloat)
+				}
+				for _, val := range flag.OneOf {
+					valFloat, _ := strconv.Atoi(val)
+					schema.Enum = append(schema.Enum, valFloat)
+				}
+			}
 		}
 		schema.Format = REFLECT_TYPE_MAP[t.Kind()]
 	case "number":
 		schema.Number = &Number{}
 		if flag != nil {
 			schema.Number.Bind(*flag)
+			if len(flag.Eq) > 0 || len(flag.OneOf) > 0 {
+				schema.Enum = make([]any, 0, len(flag.Eq)+len(flag.OneOf))
+				for _, val := range flag.Eq {
+					valFloat, _ := strconv.ParseFloat(val, 64)
+					schema.Enum = append(schema.Enum, valFloat)
+				}
+				for _, val := range flag.OneOf {
+					valFloat, _ := strconv.ParseFloat(val, 64)
+					schema.Enum = append(schema.Enum, valFloat)
+				}
+			}
 		}
 		schema.Format = REFLECT_TYPE_MAP[t.Kind()]
 	case "string":
@@ -175,11 +180,35 @@ func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (Sche
 		if flag != nil {
 			schema.String.Bind(*flag)
 			schema.Format = flag.GetFormat()
+			if len(flag.Eq) > 0 || len(flag.EqIgnoreCase) > 0 || len(flag.OneOf) > 0 {
+				enums := make([]string, 0, len(flag.Eq)+len(flag.EqIgnoreCase)+len(flag.OneOf))
+				enums = append(enums, flag.Eq...)
+				enums = append(enums, flag.EqIgnoreCase...)
+				enums = append(enums, flag.OneOf...)
+				a := make([]any, len(enums))
+				for i, v := range enums {
+					a[i] = v
+				}
+				schema.Enum = a
+			}
 		}
 	case "boolean":
-		// No additional properties for boolean
+		schema.Enum = make([]any, 0, 2)
+		if flag != nil {
+			if len(flag.Eq) > 0 {
+				for _, v := range flag.Eq {
+					b, err := strconv.ParseBool(v)
+					if err != nil {
+						return schema, fmt.Errorf("invalid boolean value: %s", v)
+					}
+					schema.Enum = append(schema.Enum, b)
+				}
+			} else {
+				schema.Enum = []any{true, false}
+			}
+		}
 	case "array":
-		s, err := SchemaFromType(t.Elem(), bindingKey, nil)
+		s, err := SchemaFromType(t.Elem(), parsingKey, validateKey, nil)
 		if err != nil {
 			return schema, err
 		}
@@ -199,7 +228,7 @@ func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (Sche
 			field := t.Field(i)
 			// For embedded structs, we need to handle them differently
 			if field.Anonymous {
-				embeddedSchema, err := SchemaFromType(field.Type, bindingKey, nil)
+				embeddedSchema, err := SchemaFromType(field.Type, parsingKey, validateKey, nil)
 				if err != nil {
 					return schema, fmt.Errorf("create schema from type %s: %w", field.Type.String(), err)
 				}
@@ -208,22 +237,21 @@ func SchemaFromType(t reflect.Type, bindingKey string, flag *ValidateFlag) (Sche
 				continue
 			}
 
-			validateTag := field.Tag.Get(bindingKey)
-			jsonAttrs := strings.Split(field.Tag.Get("json"), ",")
+			validateTag := field.Tag.Get(validateKey)
+			parsingAttr := strings.Split(field.Tag.Get(parsingKey), ",")
 			var fieldName string
-			if len(jsonAttrs) > 0 && jsonAttrs[0] != "" {
-				fieldName = jsonAttrs[0]
-			} else {
-				fieldName = field.Name
+			if len(parsingAttr) == 0 || parsingAttr[0] == "" {
+				continue // Skip if no parsing attributes are provided
 			}
+			fieldName = parsingAttr[0]
 			validateOptions, err := ParseValidateTag(validateTag)
 			if err != nil {
-				return schema, fmt.Errorf("parse validate tag for field %s: %w", fieldName, err)
+				return schema, err
 			}
 
-			schema.Properties[fieldName], err = SchemaFromType(field.Type, bindingKey, validateOptions)
+			schema.Properties[fieldName], err = SchemaFromType(field.Type, parsingKey, validateKey, validateOptions)
 			if err != nil {
-				return schema, fmt.Errorf("create schema from type %s: %w", field.Type.String(), err)
+				return schema, err
 			}
 
 			if validateOptions != nil && validateOptions.Required {

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	m "echo_example/middlewares"
+	"echo_example/middlewares"
 	"echo_example/utils"
 
 	echoAdapter "github.com/TickLabVN/tonic/adapters/echo"
@@ -13,7 +13,9 @@ import (
 )
 
 type GetUserRequest struct {
-	ID string `param:"id" validate:"required"`
+	ID     string `param:"id" validate:"required"`
+	Name   string `query:"name"`
+	ApiKey string `header:"x-api-key" validate:"required"`
 }
 
 type User struct {
@@ -35,28 +37,23 @@ func main() {
 	e := echo.New()
 	e.Validator = &utils.CustomValidator{Validator: validator.New()}
 
-	openApiSpec := &docs.OpenApi{
+	openapi := &docs.OpenApi{
 		OpenAPI: "3.0.1",
 		Info: docs.InfoObject{
 			Version: "1.0.0",
 			Title:   "Echo Example API",
-			Contact: &docs.ContactObject{
-				Name:  "Author",
-				URL:   "https://github.com/phucvinh57",
-				Email: "npvinh0507@gmail.com",
-			},
 		},
 	}
 
 	echoAdapter.AddRoute[GetUserRequest, User](
-		openApiSpec,
-		e.GET("/users/:id", GetUser, m.Bind[GetUserRequest]),
+		openapi,
+		e.GET("/users/:id", GetUser, middlewares.Bind[GetUserRequest]),
 	)
 	echoAdapter.AddRoute[User, User](
-		openApiSpec,
-		e.POST("/users", GetUser, m.Bind[User]),
+		openapi,
+		e.POST("/users", GetUser, middlewares.Bind[User]),
 	)
+	echoAdapter.UIHandle(e, openapi, "/docs")
 
-	echoAdapter.UIHandle(e, openApiSpec, "/docs")
 	e.Logger.Fatal(e.Start(":1323"))
 }

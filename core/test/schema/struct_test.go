@@ -19,7 +19,7 @@ func TestStructWithPrimitiveField(t *testing.T) {
 		Balance   float64 `json:"balance"`
 		Score     float32 `json:"score"`
 		Disabled  bool    `json:"disabled"`
-		Remarks   string  // Default json tag is field name
+		Remarks   string  // Will not be included in the schema
 	}
 
 	spec := core.Init()
@@ -39,8 +39,7 @@ func TestStructWithPrimitiveField(t *testing.T) {
 			"email": { "type": "string" },
 			"balance": { "type": "number", "format": "float64" },
 			"score": { "type": "number", "format": "float32" },
-			"disabled": { "type": "boolean" },
-			"Remarks": { "type": "string" }
+			"disabled": { "type": "boolean" }
 		}
 	}`, schema)
 }

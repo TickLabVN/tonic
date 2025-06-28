@@ -144,14 +144,14 @@ type ValidateFlag struct {
 	CVE                        bool `json:"cve"`
 
 	// Comparison
-	Eq           string `json:"eq,omitempty"`
-	EqIgnoreCase string `json:"eq_ignore_case,omitempty"`
-	Ne           string `json:"ne,omitempty"`
-	NeIgnoreCase string `json:"ne_ignore_case,omitempty"`
-	Gt           string `json:"gt,omitempty"`
-	Gte          string `json:"gte,omitempty"`
-	Lt           string `json:"lt,omitempty"`
-	Lte          string `json:"lte,omitempty"`
+	Eq           []string `json:"eq,omitempty"`
+	EqIgnoreCase []string `json:"eq_ignore_case,omitempty"`
+	Ne           []string `json:"ne,omitempty"`
+	NeIgnoreCase []string `json:"ne_ignore_case,omitempty"`
+	Gt           string   `json:"gt,omitempty"`
+	Gte          string   `json:"gte,omitempty"`
+	Lt           string   `json:"lt,omitempty"`
+	Lte          string   `json:"lte,omitempty"`
 
 	// Others
 	Dir                bool            `json:"dir"`
@@ -167,15 +167,15 @@ type ValidateFlag struct {
 	Required           bool            `json:"required"`
 	RequiredIf         *ComparisonFlag `json:"required_if,omitempty"`
 	RequiredUnless     *ComparisonFlag `json:"required_unless,omitempty"`
-	RequiredWith       string          `json:"required_with,omitempty"`
+	RequiredWith       []string        `json:"required_with,omitempty"`
 	RequiredWithAll    []string        `json:"required_with_all,omitempty"`
-	RequiredWithout    string          `json:"required_without,omitempty"`
+	RequiredWithout    []string        `json:"required_without,omitempty"`
 	RequiredWithoutAll []string        `json:"required_without_all,omitempty"`
 	ExcludedIf         *ComparisonFlag `json:"excluded_if,omitempty"`
 	ExcludedUnless     *ComparisonFlag `json:"excluded_unless,omitempty"`
-	ExcludedWith       string          `json:"excluded_with,omitempty"`
+	ExcludedWith       []string        `json:"excluded_with,omitempty"`
 	ExcludedWithAll    []string        `json:"excluded_with_all,omitempty"`
-	ExcludedWithout    string          `json:"excluded_without,omitempty"`
+	ExcludedWithout    []string        `json:"excluded_without,omitempty"`
 	ExcludedWithoutAll []string        `json:"excluded_without_all,omitempty"`
 	Unique             bool            `json:"unique"`
 }
@@ -549,10 +549,10 @@ func ParseValidateTag(tag string) (*ValidateFlag, error) {
 		var key = kv[0]
 		if len(kv) > 1 {
 			values := strings.Split(kv[1], " ")
-			if len(values) > 1 {
-				rawTag[key] = values
+			if (key == "gt" || key == "gte" || key == "lt" || key == "lte" || key == "len" || key == "min" || key == "max") && len(values) == 1 {
+				rawTag[key] = values[0]
 			} else {
-				rawTag[key] = kv[1]
+				rawTag[key] = values
 			}
 		} else {
 			rawTag[key] = true

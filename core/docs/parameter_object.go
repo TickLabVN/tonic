@@ -13,7 +13,7 @@ type ParameterObject struct {
 	Style         string                        `json:"style,omitempty" validate:"oneof=matrix label form simple spaceDelimited pipeDelimited deepObject"`
 	Explode       bool                          `json:"explode,omitempty"`
 	AllowReserved bool                          `json:"allowReserved,omitempty"`
-	Schema        *SchemaObject                 `json:"schema,omitempty"`
+	Schema        *SchemaOrReference                 `json:"schema,omitempty"`
 	Example       any                           `json:"example,omitempty"`
 	Examples      map[string]ExampleOrReference `json:"examples,omitempty"`
 

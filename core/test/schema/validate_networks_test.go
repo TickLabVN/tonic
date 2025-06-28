@@ -1,13 +1,9 @@
 package schema_test
 
 import (
-	"encoding/json"
-	"reflect"
 	"testing"
 
 	"github.com/TickLabVN/tonic/core"
-	"github.com/TickLabVN/tonic/core/docs"
-	"github.com/TickLabVN/tonic/core/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -43,24 +39,8 @@ func TestValidate_Networks(t *testing.T) {
 	}
 
 	assert := assert.New(t)
-	dt := reflect.TypeOf(Test{})
-
-	_, err := docs.SchemaFromType(dt, "validate", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	spec := core.Init()
-	schemaName := utils.GetSchemaPath(dt)
-
-	schema, ok := spec.Components.Schemas[schemaName]
-	assert.True(ok)
-	assert.NotNil(schema)
-
-	b, err := json.Marshal(schema)
-	if err != nil {
-		t.Fatal(err)
-	}
+	b, err := AssertParse(assert, core.Init(), Test{})
+	assert.Nil(err)
 
 	assert.JSONEq(`{
 		"type": "object",
