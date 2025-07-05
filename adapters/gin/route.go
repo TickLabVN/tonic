@@ -19,7 +19,8 @@ type Route struct {
 
 func AddRoute[D any, R any](spec *docs.OpenApi, g gin.IRoutes, route Route) {
 	_, resp := reflect.TypeOf(new(D)), reflect.TypeOf(new(R))
-	spec.Components.AddSchema(resp, "json", "binding")
+	parsingKey := "json"
+	spec.Components.AddSchema(resp, parsingKey, "binding")
 
 	var basePath string
 	group, ok := g.(*gin.RouterGroup)
@@ -47,7 +48,7 @@ func AddRoute[D any, R any](spec *docs.OpenApi, g gin.IRoutes, route Route) {
 						"application/json": {
 							Schema: &docs.SchemaOrReference{
 								ReferenceObject: &docs.ReferenceObject{
-									Ref: utils.GetSchemaPath(resp),
+									Ref: fmt.Sprintf("%s_%s", utils.GetSchemaPath(resp), parsingKey),
 								},
 							},
 						},
