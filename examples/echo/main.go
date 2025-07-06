@@ -16,6 +16,9 @@ type GetUserRequest struct {
 	ID     string `param:"id" validate:"required"`
 	Name   string `query:"name"`
 	ApiKey string `header:"x-api-key" validate:"required"`
+
+	// Should be ignored in the schema if request is not a POST
+	SampleJsonField string `json:"sampleJsonField" validate:"required"`
 }
 
 type User struct {

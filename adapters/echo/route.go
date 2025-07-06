@@ -75,18 +75,20 @@ func AddRoute[D any, R any](spec *docs.OpenApi, route *echo.Route, opts ...docs.
 			fmt.Printf("Error adding body schema: %v\n", err)
 			return
 		}
-		op.RequestBody = &docs.RequestBodyOrReference{
-			RequestBodyObject: &docs.RequestBodyObject{
-				Content: map[string]docs.MediaTypeObject{
-					"application/json": {
-						Schema: &docs.SchemaOrReference{
-							ReferenceObject: &docs.ReferenceObject{
-								Ref: schemaBasePath + "_json",
+		if route.Method == echo.POST || route.Method == echo.PUT || route.Method == echo.PATCH {
+			op.RequestBody = &docs.RequestBodyOrReference{
+				RequestBodyObject: &docs.RequestBodyObject{
+					Content: map[string]docs.MediaTypeObject{
+						"application/json": {
+							Schema: &docs.SchemaOrReference{
+								ReferenceObject: &docs.ReferenceObject{
+									Ref: schemaBasePath + "_json",
+								},
 							},
 						},
 					},
 				},
-			},
+			}
 		}
 	}
 	_, err := spec.Components.AddSchema(resp, "json", "validate")
